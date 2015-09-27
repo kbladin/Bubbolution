@@ -14,7 +14,9 @@ function WorldVisualizer (world) {
 	function create() {
 		for (var i = 0; i < world.agents.length; i++) {
 			var agent = world.agents[i];
-			sprites.push(phaserGame.add.sprite(agent.posX, agent.posY, 'agentSprite'));
+
+			sprites.push(phaserGame.add.sprite(agent.x, agent.y, 'agentSprite'));
+
 		}
 	}
 	function update() {
