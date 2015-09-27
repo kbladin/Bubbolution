@@ -1,0 +1,33 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+	<title>AI - projektet yao</title>
+	<script type="text/javascript" src="lib/phaser.min.js"></script>
+    
+    <script type="text/javascript" src="js/Agent.js"></script>
+    <script type="text/javascript" src="js/Brain.js"></script>
+    <script type="text/javascript" src="js/Genecode.js"></script>
+    <script type="text/javascript" src="js/Simulator.js"></script>
+    <script type="text/javascript" src="js/World.js"></script>
+    <script type="text/javascript" src="js/WorldVisualizer.js"></script>
+    
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script type="text/javascript">
+        var world = new World(640, 480);
+        var simulator = new Simulator(world);
+        
+        var visualizer = new WorldVisualizer(world);
+
+        
+    </script>
+
+</body>
+</html>
