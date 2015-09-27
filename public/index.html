@@ -25,8 +25,14 @@
 <body>
     <script type="text/javascript">
         var world = new World(640, 480);
-        var simulator = new Simulator(world);  
+        var simulator = new Simulator(world);
         var visualizer = new WorldVisualizer(world);
+
+        simulator.start(1000);
+
+        setTimeout(function () {
+        	simulator.stop();
+        }, 3000);
     </script>
 </body>
 </html>

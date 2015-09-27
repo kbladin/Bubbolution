@@ -2,14 +2,23 @@
 // Agent
 //
 
-function Agent () {
+function Agent (x,y,dir) {
     // State
-    this.posX;
-    this.posY;
-    this.direction;
+    this.posX = x;
+    this.posY = y;
+    this.direction = dir;
 };
 
+
+
 // Atomic actions
+Agent.prototype.createAtRandomPosition = function(maxX, maxY){
+	var a = new Agent();
+	a.posX = maxX * Math.random();
+	a.posY = maxY * Math.random();
+	a.direction = 2 * Math.PI * Math.random();
+	return a;
+}
 
 Agent.prototype.walk = function(speed) {
 	var dirX = Math.cos(this.direction);
