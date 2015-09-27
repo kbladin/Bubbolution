@@ -24,8 +24,8 @@ Agent.prototype.constants = {
 	MAX_FULLNESS: 100,
 	MAX_HEALTH: 100,
 	
-	ATTENTION_RADIUS = 300;
-	REACHABLE_RADIUS = 5;
+	ATTENTION_RADIUS: 300,
+	REACHABLE_RADIUS: 5,
 };
 
 
@@ -61,7 +61,7 @@ Agent.prototype.turnRight = function() {
 };
 
 Agent.prototype.eat = function() {
-	
+
 };
 
 Agent.prototype.hit = function() {
