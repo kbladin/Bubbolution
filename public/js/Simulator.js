@@ -21,9 +21,16 @@ Simulator.prototype.stop = function() {
 Simulator.prototype.update = function() {
 	//console.log("Simulator update:", JSON.stringify(this.world));
 
-	console.log(world.getAgentsWithinRadius(10, 10, 350, true));
+	//console.log(world.getAgentsWithinRadius(10, 10, 350, true));
 
 	for (var i = 0; i < this.world.agents.length; i++) {
-		this.world.agents[i].walk(3*Math.random());
+		this.world.agents[i].walk();
+		if (Math.random() > 0.5) {
+			this.world.agents[i].turnLeft();
+		}
+		if (Math.random() > 0.5) {
+			this.world.agents[i].turnRight();
+		}
+
 	};
 };
