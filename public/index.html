@@ -1,22 +1,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" id="html">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Bubbolution</title>
-
+<head> 
+	<meta charset="UTF-8" />
+	<title>Bubbolution tills vidare</title>
+    
 	<!-- Libs -->
 	<script type="text/javascript" src="lib/phaser.min.js"></script>
 	<script type="text/javascript" src="lib/synaptic.min.js"></script>
-
+    
 	<!-- Evolution stuff -->
-	<script type="text/javascript" src="js/Agent.js"></script>
-	<script type="text/javascript" src="js/Brain.js"></script>
-	<script type="text/javascript" src="js/Genecode.js"></script>
-
+    <script type="text/javascript" src="js/Agent.js"></script>
+    <script type="text/javascript" src="js/Brain.js"></script>
+    <script type="text/javascript" src="js/Genecode.js"></script>
+    <script type="text/javascript" src="js/Simulator.js"></script>
+    <script type="text/javascript" src="js/World.js"></script>
+    <script type="text/javascript" src="js/WorldVisualizer.js"></script>
+    
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-	<h2>Hello Bubbolution World!</h2>
-	<div id="view"></div>
-	<div id="stats"></div>
+    <script type="text/javascript">
+        var world = new World(640, 480);
+        var simulator = new Simulator(world);  
+        var visualizer = new WorldVisualizer(world);
+    </script>
 </body>
 </html>
