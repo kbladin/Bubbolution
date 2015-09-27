@@ -11,25 +11,25 @@ function Agent () {
 
 // Atomic actions
 
-Agent.prototype.walk = function(dt, speed) {
+Agent.prototype.walk = function(speed) {
 	var dirX = Math.cos(this.direction);
 	var dirY = Math.sin(this.direction);
-	this.posX += dirX * speed * dt;
-	this.posY += dirY * speed * dt;
+	this.posX += dirX * speed;
+	this.posY += dirY * speed;
 };
 
-Agent.prototype.walkSideways = function(dt, speed) {
+Agent.prototype.walkSideways = function(speed) {
 	var dirX = Math.cos(this.direction + Math.PI / 2);
 	var dirY = Math.sin(this.direction + Math.PI / 2);
-	this.posX += dirX * speed * dt;
-	this.posY += dirY * speed * dt;
+	this.posX += dirX * speed;
+	this.posY += dirY * speed;
 };
 
-Agent.prototype.turn = function(dt, angularVelocity) {
-	this.direction += angularVelocity * dt;
+Agent.prototype.turn = function(angularVelocity) {
+	this.direction += angularVelocity;
 };
 
-Agent.prototype.pickUp = function(dt) {
+Agent.prototype.pickUp = function() {
 
 };
 
