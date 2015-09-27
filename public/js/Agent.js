@@ -3,47 +3,65 @@
 //
 
 function Agent (x,y,dir) {
-    // State
-    this.posX = x;
-    this.posY = y;
-    this.direction = dir;
+    // State for each Agent
+
+    // Position and orientation
+    this.x = x;
+    this.y = y;
+    this.dir = dir;
+
+    // 
+  	this.fullness = 100
+    this.health = 100;
+    this.carma = 0;
+};
+
+// STATIC CONSTNTS
+Agent.prototype.constants = {
+	WALKSPEED: 1,
+	ANGULAR_VELOCITY: Math.PI / 16,
+
+	MAX_FULLNESS: 100,
+	MAX_HEALTH: 100,
+	
+	ATTENTION_RADIUS = 300;
+	REACHABLE_RADIUS = 5;
 };
 
 
-
-// Atomic actions
 Agent.prototype.createAtRandomPosition = function(maxX, maxY){
 	var a = new Agent();
-	a.posX = maxX * Math.random();
-	a.posY = maxY * Math.random();
-	a.direction = 2 * Math.PI * Math.random();
+	a.x = maxX * Math.random();
+	a.y = maxY * Math.random();
+	a.dir = 2 * Math.PI * Math.random();
 	return a;
 }
 
+// Atomic actions
 Agent.prototype.walk = function(speed) {
-	var dirX = Math.cos(this.direction);
-	var dirY = Math.sin(this.direction);
-	this.posX += dirX * speed;
-	this.posY += dirY * speed;
+	var dirX = Math.cos(this.dir);
+	var dirY = Math.sin(this.dir);
+	this.x += dirX * speed;
+	this.y += dirY * speed;
 };
 
 Agent.prototype.walkSideways = function(speed) {
-	var dirX = Math.cos(this.direction + Math.PI / 2);
-	var dirY = Math.sin(this.direction + Math.PI / 2);
-	this.posX += dirX * speed;
-	this.posY += dirY * speed;
+	var dirX = Math.cos(this.dir + Math.PI / 2);
+	var dirY = Math.sin(this.dir + Math.PI / 2);
+	this.x += dirX * speed;
+	this.y += dirY * speed;
 };
 
-Agent.prototype.turn = function(angularVelocity) {
-	this.direction += angularVelocity;
+Agent.prototype.turnLeft = function() {
+	this.dir -= this.constants.ANGULAR_VELOCITY;
 };
 
-Agent.prototype.pickUp = function() {
-
+Agent.prototype.turnRight = function() {
+	this.dir += this.constants.ANGULAR_VELOCITY;
 };
 
 Agent.prototype.eat = function() {
-
+	
 };
 
 Agent.prototype.hit = function() {
@@ -56,6 +74,6 @@ Agent.prototype.mate = function() {
 
 // HighLevel actions
 
-Agent.prototype.functionName = function() {
+Agent.prototype.eatClosestFood = function() {
 
 };
