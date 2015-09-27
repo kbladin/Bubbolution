@@ -4,6 +4,7 @@
 
 function WorldVisualizer (world) {
 
+	sprites = [];
 	// PHASER GAME
 
     var phaserGame = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
@@ -13,12 +14,14 @@ function WorldVisualizer (world) {
 	function create() {
 		for (var i = 0; i < world.agents.length; i++) {
 			var agent = world.agents[i];
-			phaserGame.add.sprite(agent.posX, agent.posY, 'agentSprite');
+			sprites.push(phaserGame.add.sprite(agent.posX, agent.posY, 'agentSprite'));
 		}
 	}
 	function update() {
 		for (var i = 0; i < world.agents.length; i++) {
 			var agent = world.agents[i];
+			sprites[i].x = agent.posX;
+			sprites[i].y = agent.posY;
 		}
 	}
 }
