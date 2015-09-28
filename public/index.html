@@ -29,11 +29,14 @@
         var simulator = new Simulator(world);
         var visualizer = new WorldVisualizer(world);
 
-        simulator.start(1000);
+        simulator.start({
+        	updatesPerWait: 1,
+        	waitTime: 10
+        });
 
         setTimeout(function () {
         	simulator.stop();
-        }, 3000);
+        }, 5000);
     </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 //
 // Agent
 //
+var agentCount = 0;
 
 function Agent (world, x,y,dir) {
 	this.world = world;
@@ -15,12 +16,14 @@ function Agent (world, x,y,dir) {
   	this.fullness = 100
     this.health = 100;
     this.carma = 0;
+	
+	this.id = agentCount++;
 };
 
-// STATIC CONSTNTS
+// STATIC CONSTANTS
 Agent.prototype.constants = {
-	WALKSPEED: 1,
-	ANGULAR_VELOCITY: Math.PI / 16,
+	WALKSPEED: 9.9,
+	ANGULAR_VELOCITY: Math.PI / 3,
 
 	MAX_FULLNESS: 100,
 	MAX_HEALTH: 100,
@@ -45,18 +48,18 @@ Agent.prototype.createAtRandomPosition = function(world){
 
 
 // Atomic actions
-Agent.prototype.walk = function(speed) {
+Agent.prototype.walk = function() {
 	var dirX = Math.cos(this.dir);
 	var dirY = Math.sin(this.dir);
-	this.x += dirX * speed;
-	this.y += dirY * speed;
+	this.x += dirX * this.constants.WALKSPEED;
+	this.y += dirY * this.constants.WALKSPEED;
 };
 
-Agent.prototype.walkSideways = function(speed) {
+Agent.prototype.walkSideways = function() {
 	var dirX = Math.cos(this.dir + Math.PI / 2);
 	var dirY = Math.sin(this.dir + Math.PI / 2);
-	this.x += dirX * speed;
-	this.y += dirY * speed;
+	this.x += dirX * this.constants.WALKSPEED;
+	this.y += dirY * this.constants.WALKSPEED;
 };
 
 Agent.prototype.turnLeft = function() {

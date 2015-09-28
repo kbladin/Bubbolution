@@ -4,8 +4,9 @@
 
 function Simulator (world) {
 	this.world = world;
+	this.updatesPerWait = 1;
 
-	for (var i = 0; i < 3; i++) {
+	for (var i = 0; i < 10; i++) {
 		var a = Agent.prototype.createAtRandomPosition(world);
 		world.agents.push(a);
 	}
@@ -17,20 +18,27 @@ function Simulator (world) {
 
 };
 
-Simulator.prototype.start = function(waitTime) {
-	this.loop = setInterval(this.update, waitTime);
+var numUpdates = 0;
+Simulator.prototype.start = function(simParams) {
+	this.updatesPerWait = simParams.updatesPerWait;
+	var thisSimulator = this;
+	this.loop = setInterval(function() {
+		numUpdates += thisSimulator.updatesPerWait;
+		for (var n = 0; n < thisSimulator.updatesPerWait; n++) {
+			for (var i = 0; i < thisSimulator.world.agents.length; i++) {
+				thisSimulator.world.agents[i].walk();
+				if (Math.random() > 0.5) {
+					thisSimulator.world.agents[i].turnLeft();
+				}
+				if (Math.random() > 0.5) {
+					thisSimulator.world.agents[i].turnRight();
+				}
+			};
+		}
+	}, simParams.waitTime);
 };
 
 Simulator.prototype.stop = function() {
 	clearInterval(this.loop)
-};
-
-Simulator.prototype.update = function() {
-	//console.log("Simulator update:", JSON.stringify(this.world));
-
-	console.log(world.getAgentsWithinRadius(10, 10, 350, true));
-
-	for (var i = 0; i < this.world.agents.length; i++) {
-		this.world.agents[i].walk(3*Math.random());
-	};
+	console.log('numUpdates:', numUpdates);
 };

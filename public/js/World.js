@@ -6,6 +6,8 @@ function World (width, height) {
 	this.width = width;
 	this.height = height;
 
+	gameobjectObservers = [];
+
 	this.agents = [];
 	this.foods = [];
 	this.foodSpawners = [];
