@@ -2,7 +2,8 @@
 // Agent
 //
 
-function Agent (x,y,dir) {
+function Agent (world, x,y,dir) {
+	this.world = world;
     // State for each Agent
 
     // Position and orientation
@@ -26,16 +27,22 @@ Agent.prototype.constants = {
 	
 	ATTENTION_RADIUS: 300,
 	REACHABLE_RADIUS: 5,
+
+	FULLNESS_PER_FOOD: 40,
+	DAMAGE_PER_HIT: 30,
 };
 
 
-Agent.prototype.createAtRandomPosition = function(maxX, maxY){
-	var a = new Agent();
-	a.x = maxX * Math.random();
-	a.y = maxY * Math.random();
+Agent.prototype.createAtRandomPosition = function(world){
+	var a = new Agent(world);
+	a.x = world.width * Math.random();
+	a.y = world.height * Math.random();
 	a.dir = 2 * Math.PI * Math.random();
 	return a;
 }
+
+
+
 
 // Atomic actions
 Agent.prototype.walk = function(speed) {
@@ -60,13 +67,30 @@ Agent.prototype.turnRight = function() {
 	this.dir += this.constants.ANGULAR_VELOCITY;
 };
 
-Agent.prototype.eat = function() {
-
+Agent.prototype.tryEat = function() {
+	var foods = this.world.getFoodsWithinRadius(this.x, this.y, this.constants.REACHABLE_RADIUS, true);
+	if(foods){
+		var eatenFood = foods[0];
+		world.removeFood(eatenFood);
+		fullness += this.constants.FULLNESS_PER_FOOD;
+	}
 };
 
-Agent.prototype.hit = function() {
-
+Agent.prototype.attack = function() {
+	var agents = this.world.getAgentsWithinRadius(this.x, this.y, this.constants.REACHABLE_RADIUS, true);
+	if(agents){
+		var targetAgent = agents[0];
+		targetAgent.getAttackedBy(this);
+	}
 };
+
+Agent.prototype.getAttackedBy = function (attacker) {
+	this.health -= DAMAGE_PER_HIT;
+	if(this.health <= 0){
+		// I just died?? 
+		this.world.removeAgent(this);
+	}
+}
 
 Agent.prototype.mate = function() {
 

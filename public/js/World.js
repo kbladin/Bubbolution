@@ -38,7 +38,7 @@ World.prototype.getGameObjectsWithinRadius = function(array, x, y, radius, sorte
 	});
 
 	if(sorted){
-		nearByGameObjects.sort(function (o1,o2){
+		nearByGameObjects.sort(function (o1, o2){
 			return o1.dist2 > o2.dist2;
 		});
 	}
@@ -48,3 +48,32 @@ World.prototype.getGameObjectsWithinRadius = function(array, x, y, radius, sorte
 
 
 
+World.prototype.removeFoodSpawners = function (foodSpawners){
+	return removeGameObject(this.foodSpawners, foodSpawners);
+}
+
+World.prototype.removeAgent = function (agent){
+	return removeGameObject(this.agents, agent);
+}
+
+World.prototype.removeFood = function (food) {
+	return removeGameObject(this.foods, food);
+}
+
+World.prototype.removeGameObject = function(array, gameObject){
+	for(var i = 0; i<array.length; ++i){
+		if(array[i].id === gameObject.id){
+			array.splice(i,1);
+			//nofify observers that gameobject was removed?
+			return true;
+		}
+	}
+	return false;
+}
+
+World.prototype.getRandomPosition = function(){
+	return {
+		x: this.width * Math.random(),
+		y: this.height * Math.random()
+	};
+}

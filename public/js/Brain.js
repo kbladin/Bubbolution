@@ -3,7 +3,7 @@
 //
 
 function Brain () {
-    
+	
 }
 
 Brain.prototype.mutate = function(mutationRate) {
