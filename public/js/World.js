@@ -33,7 +33,7 @@ World.prototype.getGameObjectsWithinRadius = function(array, x, y, radius, sorte
 		var dist2 = (o.x-x)*(o.x-x) + (o.y-y)*(o.y-y);
 		if(dist2 < r2){
 			nearByGameObjects.push({
-				object: o,
+				gameObject: o,
 				dist2: dist2
 			});
 		}

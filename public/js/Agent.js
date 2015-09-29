@@ -5,30 +5,29 @@ var agentCount = 0;
 
 function Agent (world, x,y,dir) {
 	this.world = world;
-    // State for each Agent
+	this.id = agentCount++;
 
     // Position and orientation
     this.x = x;
     this.y = y;
-    this.dir = dir;
+    this.angle = dir;
+    this.alive = true;
 
-    // 
+    // Neural network input
   	this.fullness = 100
     this.health = 100;
-    this.carma = 0;
 	
-	this.id = agentCount++;
 };
 
 // STATIC CONSTANTS
 Agent.prototype.constants = {
 	WALKSPEED: 9.9,
-	ANGULAR_VELOCITY: Math.PI / 3,
+	ANGULAR_VELOCITY: Math.PI / 16,
 
 	MAX_FULLNESS: 100,
 	MAX_HEALTH: 100,
 	
-	ATTENTION_RADIUS: 300,
+	ATTENTION_RADIUS: 500,
 	REACHABLE_RADIUS: 5,
 
 	FULLNESS_PER_FOOD: 40,
@@ -40,7 +39,7 @@ Agent.prototype.createAtRandomPosition = function(world){
 	var a = new Agent(world);
 	a.x = world.width * Math.random();
 	a.y = world.height * Math.random();
-	a.dir = 2 * Math.PI * Math.random();
+	a.angle = 2 * Math.PI * Math.random() - Math.PI;
 	return a;
 }
 
@@ -49,25 +48,31 @@ Agent.prototype.createAtRandomPosition = function(world){
 
 // Atomic actions
 Agent.prototype.walk = function() {
-	var dirX = Math.cos(this.dir);
-	var dirY = Math.sin(this.dir);
+	var dirX = Math.cos(this.angle);
+	var dirY = Math.sin(this.angle);
 	this.x += dirX * this.constants.WALKSPEED;
 	this.y += dirY * this.constants.WALKSPEED;
 };
 
 Agent.prototype.walkSideways = function() {
-	var dirX = Math.cos(this.dir + Math.PI / 2);
-	var dirY = Math.sin(this.dir + Math.PI / 2);
+	var dirX = Math.cos(this.angle + Math.PI / 2);
+	var dirY = Math.sin(this.angle + Math.PI / 2);
 	this.x += dirX * this.constants.WALKSPEED;
 	this.y += dirY * this.constants.WALKSPEED;
 };
 
 Agent.prototype.turnLeft = function() {
-	this.dir -= this.constants.ANGULAR_VELOCITY;
+	this.angle -= this.constants.ANGULAR_VELOCITY;
+	if(this.angle < -Math.PI){
+		this.angle += 2*Math.PI;
+	}
 };
 
 Agent.prototype.turnRight = function() {
-	this.dir += this.constants.ANGULAR_VELOCITY;
+	this.angle += this.constants.ANGULAR_VELOCITY;
+	if(Math.PI < this.angle){
+		this.angle -= 2*Math.PI;
+	}
 };
 
 Agent.prototype.tryEat = function() {
@@ -91,6 +96,7 @@ Agent.prototype.getAttackedBy = function (attacker) {
 	this.health -= DAMAGE_PER_HIT;
 	if(this.health <= 0){
 		// I just died?? 
+		this.alive = false;
 		this.world.removeAgent(this);
 	}
 }
@@ -99,8 +105,85 @@ Agent.prototype.mate = function() {
 
 };
 
+Agent.prototype.wander = function() {
+	if (Math.random() > 0.5) {
+		this.turnLeft();
+	}
+	if (Math.random() > 0.5) {
+		this.turnRight();
+	}
+	this.walk();
+}
+
+Agent.prototype.isReachable = function (o) {
+	var reachableDist2 = this.REACHABLE_RADIUS*this.REACHABLE_RADIUS;
+	return this.dist2To(o) < reachableDist2;
+}
+
+Agent.prototype.eat = function(food){
+	this.fullness += FULLNESS_PER_FOOD;
+	world.removeFood(food);
+}
+
+
+
+
+
 // HighLevel actions
 
-Agent.prototype.eatClosestFood = function() {
+Agent.prototype.isFacing = function (pos) {
+	var aDiff = this.angleDiff(pos);
+	if(Math.abs(aDiff) < this.constants.ANGULAR_VELOCITY*0.5){
+		console.log("facing!");
+		return true;
+	}
+	else{
+		console.log("not facing");
+		return false;
+	}
+}
 
+Agent.prototype.turnTo = function (pos) {
+	var aDiff = this.angleDiff(pos);
+	console.log(-this.constants.ANGULAR_VELOCITY * 0.5,aDiff,this.constants.ANGULAR_VELOCITY * 0.5);
+	if(aDiff < -this.constants.ANGULAR_VELOCITY * 0.5){
+		this.turnLeft();
+		console.log('turn left');
+		return false;
+	}
+	if (this.constants.ANGULAR_VELOCITY * 0.5 < aDiff){
+		this.turnRight();
+		console.log('turn right');
+		return false;
+	}
+	console.log('no turn');
+	return true;
+}
+
+Agent.prototype.walkTo = function(pos){
+	if(this.turnTo(pos)){
+		this.walk();
+		return;
+	}
+}
+
+Agent.prototype.findAndEatFood = function() {
+	var nearbyFoods = this.world.getFoodsWithinRadius(this.x, this.y, this.constants.ATTENTION_RADIUS, true);
+	if(nearbyFoods.length > 0){
+		console.log('got food');
+		var food = nearbyFoods[0].gameObject;
+		console.log(food);
+		if(this.isReachable(food)){
+			console.log('eat');
+			this.eat(food);
+		}
+		else{
+			console.log('walk to food');
+			this.walkTo(food);
+		}
+	}
+	else{
+		console.log('wander');
+		this.wander();
+	}
 };
