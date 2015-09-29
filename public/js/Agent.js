@@ -27,8 +27,8 @@ Agent.prototype.constants = {
 	MAX_FULLNESS: 100,
 	MAX_HEALTH: 100,
 	
-	ATTENTION_RADIUS: 500,
-	REACHABLE_RADIUS: 5,
+	ATTENTION_RADIUS: 100,
+	REACHABLE_RADIUS: 10,
 
 	FULLNESS_PER_FOOD: 40,
 	DAMAGE_PER_HIT: 30,
@@ -52,6 +52,14 @@ Agent.prototype.walk = function() {
 	var dirY = Math.sin(this.angle);
 	this.x += dirX * this.constants.WALKSPEED;
 	this.y += dirY * this.constants.WALKSPEED;
+
+	if(this.x < 0 || this.world.width < this.x ||
+		this.y< 0 || this.world.height < this.y){
+		
+		this.angle += Math.PI;
+		this.x = Math.min(this.world.width, Math.max(this.x, 0));
+		this.y = Math.min(this.world.height, Math.max(this.y, 0));
+	}
 };
 
 Agent.prototype.walkSideways = function() {
@@ -116,13 +124,14 @@ Agent.prototype.wander = function() {
 }
 
 Agent.prototype.isReachable = function (o) {
-	var reachableDist2 = this.REACHABLE_RADIUS*this.REACHABLE_RADIUS;
-	return this.dist2To(o) < reachableDist2;
+	var reachableDist2 = this.constants.REACHABLE_RADIUS*this.constants.REACHABLE_RADIUS;
+	var dist2ToObject = this.dist2To(o);
+	return dist2ToObject < reachableDist2;
 }
 
 Agent.prototype.eat = function(food){
-	this.fullness += FULLNESS_PER_FOOD;
-	world.removeFood(food);
+	this.fullness += this.constants.FULLNESS_PER_FOOD;
+	this.world.removeFood(food);
 }
 
 
@@ -157,7 +166,6 @@ Agent.prototype.turnTo = function (pos) {
 Agent.prototype.walkTo = function(pos){
 	if(this.turnTo(pos)){
 		this.walk();
-		return;
 	}
 }
 

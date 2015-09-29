@@ -26,18 +26,18 @@
 </head>
 <body>
     <script type="text/javascript">
-        var world = new World(640, 480);
+        var world = new World(800, 600);
         var simulator = new Simulator(world);
         var visualizer = new WorldVisualizer(world);
 
         simulator.start({
-        	updatesPerWait: 30,
-        	waitTime: 10
+        	updatesPerWait: 1,
+        	waitTime: 20
         });
 
         setTimeout(function () {
         	simulator.stop();
-        }, 5000);
+        }, 20000);
     </script>
 </body>
 </html>
