@@ -20,6 +20,18 @@ function WorldVisualizer (world) {
 		bmd.clear(0,0,800,600);
 		var foodRadius = 10;
 		var agentRadius = 10;
+
+		// Draw food spawners
+		for (var i = 0; i < world.foodSpawners.length; i++) {
+			var foodSpawner = world.foodSpawners[i];
+			// Draw circle
+			bmd.ctx.fillStyle = '#449944';
+			bmd.ctx.beginPath();
+			bmd.ctx.arc(foodSpawner.x, foodSpawner.y, foodSpawner.radius, 0, Math.PI*2, true); 
+			bmd.ctx.closePath();
+			bmd.ctx.fill();
+		}
+
 		// Draw food
 		for (var i = 0; i < world.foods.length; i++) {
 			var food = world.foods[i];

@@ -60,6 +60,21 @@ Agent.prototype.walk = function() {
 		this.x = Math.min(this.world.width, Math.max(this.x, 0));
 		this.y = Math.min(this.world.height, Math.max(this.y, 0));
 	}
+
+	
+	if(this.fullness > 0){
+		this.fullness-=0.5;
+		if(this.fullness > this.constants.MAX_FULLNESS*0.5 &&
+		 	this.health < this.constants.MAX_HEALTH){
+			this.health += 0.1;
+		}
+	}
+	else{
+		this.health -= 0.1;
+		if(this.health < 0){
+			this.world.removeAgent(this);
+		}
+	}
 };
 
 Agent.prototype.walkSideways = function() {
@@ -184,3 +199,10 @@ Agent.prototype.findAndEatFood = function() {
 		this.wander();
 	}
 };
+
+Agent.prototype.toString = function () {
+	return JSON.stringify({
+		health: this.health,
+		fullness: this.fullness
+	});
+}
