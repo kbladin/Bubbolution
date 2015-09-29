@@ -3,35 +3,50 @@
 //
 
 function WorldVisualizer (world) {
-
-	var spriteMap = {};
+	var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
+	var bmd;
+	var bitmapSprite;
 	
-	// PHASER GAME
-    var phaserGame = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
 	function preload() {
-    	phaserGame.load.image('agentSprite', 'assets/sprites/star.png');
-    	phaserGame.load.image('foodSprite', 'assets/sprites/burger.png');
-	}
 
-	function create() {
-		for (var i = 0; i < world.agents.length; i++) {
-			var agent = world.agents[i];
-			spriteMap['a'+agent.id] = phaserGame.add.sprite(agent.x, agent.y, 'agentSprite');
-		}
-
-		for(var i = 0; i<world.foods.length; ++i){
-			var food = world.foods[i];
-			spriteMap['f'+food.id] = phaserGame.add.sprite(food.x, food.y, 'foodSprite');
-		}
 	}
 	
-	function update() {
+	function create() {
+        bmd = game.add.bitmapData(800,600);
+        bitmapSprite = game.add.sprite(0, 0, bmd);
+	}
+	
+	function update() {		
+		bmd.clear(0,0,800,600);
+		var foodRadius = 10;
+		var agentRadius = 10;
+		// Draw food
+		for (var i = 0; i < world.foods.length; i++) {
+			var food = world.foods[i];
+			// Draw circle
+			bmd.ctx.fillStyle = '#994444';
+			bmd.ctx.beginPath();
+			bmd.ctx.arc(food.x, food.y, foodRadius, 0, Math.PI*2, true); 
+			bmd.ctx.closePath();
+			bmd.ctx.fill();
+		}
+		// Draw agents
 		for (var i = 0; i < world.agents.length; i++) {
 			var agent = world.agents[i];
-			var sprite = spriteMap['a'+agent.id];
-			sprite.x = agent.x;
-			sprite.y = agent.y;
+			// Draw circle
+			bmd.ctx.fillStyle = '#999999';
+			bmd.ctx.beginPath();
+			bmd.ctx.arc(agent.x, agent.y, agentRadius, 0, Math.PI*2, true); 
+			bmd.ctx.closePath();
+			bmd.ctx.fill();
+			// Draw direction indicator
+			bmd.ctx.strokeStyle = '#FFFFFF';
+			bmd.ctx.lineWidth = 5;
+			bmd.ctx.beginPath();
+			bmd.ctx.moveTo(agent.x, agent.y);
+			bmd.ctx.lineTo(agent.x + Math.cos(agent.dir) * agentRadius, agent.y + Math.sin(agent.dir) * agentRadius);
+			bmd.ctx.stroke();
 		}
+
 	}
 }
