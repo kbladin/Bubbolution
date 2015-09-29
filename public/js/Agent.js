@@ -134,29 +134,23 @@ Agent.prototype.eat = function(food){
 Agent.prototype.isFacing = function (pos) {
 	var aDiff = this.angleDiff(pos);
 	if(Math.abs(aDiff) < this.constants.ANGULAR_VELOCITY*0.5){
-		console.log("facing!");
 		return true;
 	}
 	else{
-		console.log("not facing");
 		return false;
 	}
 }
 
 Agent.prototype.turnTo = function (pos) {
 	var aDiff = this.angleDiff(pos);
-	console.log(-this.constants.ANGULAR_VELOCITY * 0.5,aDiff,this.constants.ANGULAR_VELOCITY * 0.5);
 	if(aDiff < -this.constants.ANGULAR_VELOCITY * 0.5){
 		this.turnLeft();
-		console.log('turn left');
 		return false;
 	}
 	if (this.constants.ANGULAR_VELOCITY * 0.5 < aDiff){
 		this.turnRight();
-		console.log('turn right');
 		return false;
 	}
-	console.log('no turn');
 	return true;
 }
 
@@ -170,20 +164,15 @@ Agent.prototype.walkTo = function(pos){
 Agent.prototype.findAndEatFood = function() {
 	var nearbyFoods = this.world.getFoodsWithinRadius(this.x, this.y, this.constants.ATTENTION_RADIUS, true);
 	if(nearbyFoods.length > 0){
-		console.log('got food');
 		var food = nearbyFoods[0].gameObject;
-		console.log(food);
 		if(this.isReachable(food)){
-			console.log('eat');
 			this.eat(food);
 		}
 		else{
-			console.log('walk to food');
 			this.walkTo(food);
 		}
 	}
 	else{
-		console.log('wander');
 		this.wander();
 	}
 };

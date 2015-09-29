@@ -44,9 +44,8 @@ function WorldVisualizer (world) {
 			bmd.ctx.lineWidth = 5;
 			bmd.ctx.beginPath();
 			bmd.ctx.moveTo(agent.x, agent.y);
-			bmd.ctx.lineTo(agent.x + Math.cos(agent.dir) * agentRadius, agent.y + Math.sin(agent.dir) * agentRadius);
+			bmd.ctx.lineTo(agent.x + Math.cos(agent.angle) * agentRadius, agent.y + Math.sin(agent.angle) * agentRadius);
 			bmd.ctx.stroke();
 		}
-
 	}
 }
