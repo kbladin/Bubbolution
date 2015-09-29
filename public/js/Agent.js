@@ -55,8 +55,8 @@ Agent.prototype.walk = function() {
 
 	if(this.x < 0 || this.world.width < this.x ||
 		this.y< 0 || this.world.height < this.y){
-		
-		this.angle += Math.PI;
+
+		this.angle += Math.PI*0.5 + Math.PI*Math.random();
 		this.x = Math.min(this.world.width, Math.max(this.x, 0));
 		this.y = Math.min(this.world.height, Math.max(this.y, 0));
 	}

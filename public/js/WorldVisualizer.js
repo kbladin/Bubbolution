@@ -33,6 +33,15 @@ function WorldVisualizer (world) {
 		// Draw agents
 		for (var i = 0; i < world.agents.length; i++) {
 			var agent = world.agents[i];
+
+			// Draw attention radius
+			bmd.ctx.strokeStyle = '#333';
+			bmd.ctx.lineWidth = 2;
+			bmd.ctx.beginPath();
+			bmd.ctx.arc(agent.x, agent.y, agent.constants.ATTENTION_RADIUS, 0, Math.PI*2, true); 
+			bmd.ctx.closePath();
+			bmd.ctx.stroke();
+
 			// Draw circle
 			bmd.ctx.fillStyle = '#999999';
 			bmd.ctx.beginPath();

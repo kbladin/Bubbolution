@@ -31,13 +31,13 @@
         var visualizer = new WorldVisualizer(world);
 
         simulator.start({
-        	updatesPerWait: 1,
+        	updatesPerWait: 10,
         	waitTime: 20
         });
 
         setTimeout(function () {
         	simulator.stop();
-        }, 20000);
+        }, 10000);
     </script>
 </body>
 </html>

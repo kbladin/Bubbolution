@@ -11,7 +11,7 @@ function Simulator (world) {
 		world.agents.push(a);
 	}
 
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 100; i++) {
 		var pos = world.getRandomPosition();
 		world.foods.push(new Food(world, pos.x, pos.y));
 	};
