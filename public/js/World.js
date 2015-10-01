@@ -5,6 +5,9 @@
 function World (width, height) {
 	this.width = width;
 	this.height = height;
+	this.numUpdates = 0;
+	this.numBornAgents = 0;
+	this.numDeadAgents = 0;
 
 	gameobjectObservers = [];
 
@@ -35,7 +38,7 @@ World.prototype.getGameObjectsWithinRadius = function(array, gameObject, radius,
 		if(gameObject.id === o.id){
 			return;
 		}
-		
+
 		var dist2 = (o.x-x)*(o.x-x) + (o.y-y)*(o.y-y);
 		if(dist2 < r2){
 			nearByGameObjects.push({

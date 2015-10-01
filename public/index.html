@@ -18,6 +18,7 @@
 	<script type="text/javascript" src="js/Simulator.js"></script>
 	<script type="text/javascript" src="js/World.js"></script>
 	<script type="text/javascript" src="js/WorldVisualizer.js"></script>
+	<script type="text/javascript" src="js/StatsMonitor.js"></script>
 
 	<style type="text/css">
 		body {
@@ -26,19 +27,23 @@
 	</style>
 </head>
 <body>
+
 	<script type="text/javascript">
 		var world = new World(800, 600);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world);
+		var statsMonitor = new StatsMonitor(world, document.body);
+
+		statsMonitor.start({waitTime: 1000});
 
 		simulator.start({
-			updatesPerWait: 1,
+			updatesPerWait: 20,
 			waitTime: 10
 		});
 
 		setTimeout(function () {
 			simulator.stop();
-		}, 50000);
+		}, 25000);
 	</script>
 </body>
 </html>

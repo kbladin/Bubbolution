@@ -7,10 +7,9 @@ function Simulator (world) {
 	this.updatesPerWait = 1;
 
 
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 2; i++) {
 		var pos = world.getRandomPosition();
-		console.log(pos);
-		var foodSpawner = new FoodSpawner(world, pos.x, pos.y, 100, 200);
+		var foodSpawner = new FoodSpawner(world, pos.x, pos.y, 100, 100);
 		world.foodSpawners.push(foodSpawner);
 	}
 
@@ -26,12 +25,11 @@ function Simulator (world) {
 
 };
 
-var numUpdates = 0;
 Simulator.prototype.start = function(simParams) {
 	this.updatesPerWait = simParams.updatesPerWait;
 	var thisSimulator = this;
 	this.loop = setInterval(function() {
-		numUpdates += thisSimulator.updatesPerWait;
+		thisSimulator.world.numUpdates += thisSimulator.updatesPerWait;
 		for (var n = 0; n < thisSimulator.updatesPerWait; n++) {
 
 			//Update foodSpawners
@@ -50,7 +48,7 @@ Simulator.prototype.start = function(simParams) {
 
 Simulator.prototype.stop = function() {
 	clearInterval(this.loop)
-	console.log('numUpdates:', numUpdates);
+	console.log('numUpdates:', this.world.numUpdates);
 	console.log(this.world.agents.map(function(a) {
 		return a.toString();
 	}));

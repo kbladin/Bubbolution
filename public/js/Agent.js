@@ -56,6 +56,7 @@ Agent.prototype.update = function() {
 		this.health -= this.constants.HEALTH_DECREASE_RATE;
 		if(this.health < 0){
 			this.world.removeAgent(this);
+			this.world.numDeadAgents++; //Ugly to do stats things here
 		}
 	}
 };
@@ -193,6 +194,7 @@ Agent.prototype.mate = function(agent) {
 	babyAgent.health = Math.min(this.health, agent.health);
 
 	this.world.agents.push(babyAgent);
+	this.world.numBornAgents++; // ugly to do stats things here!
 };
 
 
@@ -263,7 +265,7 @@ Agent.prototype.findAndMateAgent = function() {
 
 // This action is only for testing basic behavior
 Agent.prototype.smartAction = function(){
-	if(this.health > 0.8 * this.constants.MAX_HEALTH){
+	if(this.health > 0.6 * this.constants.MAX_HEALTH){
 		this.findAndMateAgent();
 	}
 	else{
