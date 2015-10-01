@@ -13,23 +13,29 @@ function World (width, height) {
 	this.foodSpawners = [];
 };
 
-World.prototype.getAgentsWithinRadius = function(x, y, radius, sorted) {
-	return this.getGameObjectsWithinRadius(this.agents, x, y, radius, sorted);
+World.prototype.getAgentsWithinRadius = function(gameObject, radius, sorted) {
+	return this.getGameObjectsWithinRadius(this.agents, gameObject, radius, sorted);
 };
 
-World.prototype.getFoodsWithinRadius = function(x, y, radius, sorted) {
-	return this.getGameObjectsWithinRadius(this.foods, x, y, radius, sorted);
+World.prototype.getFoodsWithinRadius = function(gameObject, radius, sorted) {
+	return this.getGameObjectsWithinRadius(this.foods, gameObject, radius, sorted);
 };
 
-World.prototype.getFoodSpawnersWithinRadius = function(x, y, radius, sorted) {
-	return this.getGameObjectsWithinRadius(this.foodSpawners, x, y, radius, sorted);
+World.prototype.getFoodSpawnersWithinRadius = function(gameObject, radius, sorted) {
+	return this.getGameObjectsWithinRadius(this.foodSpawners, gameObject, radius, sorted);
 };
 
-World.prototype.getGameObjectsWithinRadius = function(array, x, y, radius, sorted){
+World.prototype.getGameObjectsWithinRadius = function(array, gameObject, radius, sorted){
 	var nearByGameObjects = [];
 	var r2 = radius * radius;
+	var x = gameObject.x;
+	var y = gameObject.y;
 
 	array.forEach(function(o){
+		if(gameObject.id === o.id){
+			return;
+		}
+		
 		var dist2 = (o.x-x)*(o.x-x) + (o.y-y)*(o.y-y);
 		if(dist2 < r2){
 			nearByGameObjects.push({
@@ -78,3 +84,10 @@ World.prototype.getRandomPosition = function(){
 		y: this.height * Math.random()
 	};
 }
+
+World.prototype.clampPosition = function(x, y, padding) {
+	return {
+		x: Math.max(Math.min(world.width -padding, x), padding),
+		y: Math.max(Math.min(world.height-padding, y), padding),
+	};
+};

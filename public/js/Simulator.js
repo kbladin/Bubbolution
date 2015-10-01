@@ -7,14 +7,14 @@ function Simulator (world) {
 	this.updatesPerWait = 1;
 
 
-	for (var i = 0; i < 3; i++) {
+	for (var i = 0; i < 5; i++) {
 		var pos = world.getRandomPosition();
 		console.log(pos);
 		var foodSpawner = new FoodSpawner(world, pos.x, pos.y, 100, 200);
 		world.foodSpawners.push(foodSpawner);
 	}
 
-	for (var i = 0; i < 3; i++) {
+	for (var i = 0; i < 2; i++) {
 		var a = Agent.prototype.createAtRandomPosition(world);
 		world.agents.push(a);
 	}
@@ -41,8 +41,7 @@ Simulator.prototype.start = function(simParams) {
 
 			//Update agents
 			for (var i = 0; i < thisSimulator.world.agents.length; ++i) {
-				var a = thisSimulator.world.agents[i];
-				a.findAndEatFood();
+				thisSimulator.world.agents[i].smartAction();
 			};
 			
 		}

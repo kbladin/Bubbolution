@@ -1,11 +1,12 @@
 
 var foodSpawnerCount = 0;
 function FoodSpawner(world, x, y, radius, spawnTime){
-	this.id = foodSpawnerCount++;
+	this.id = 'fs' + foodSpawnerCount++;
 	this.world = world;
 
-	this.x = Math.max(Math.min(world.width-radius, x), radius);
-	this.y = Math.max(Math.min(world.height-radius, y), radius);
+	var clampedPos = world.clampPosition(x, y, radius);
+	this.x = clampedPos.x;
+	this.y = clampedPos.y;
 	this.radius = radius;
 	this.spawnTime = spawnTime;
 

@@ -15,6 +15,10 @@ function WorldVisualizer (world) {
         bmd = game.add.bitmapData(800,600);
         bitmapSprite = game.add.sprite(0, 0, bmd);
 	}
+
+	function rgb(r,g,b){
+		return'rgb(' + r + ',' + g + ',' + b + ')';
+	}
 	
 	function update() {		
 		bmd.clear(0,0,800,600);
@@ -54,10 +58,14 @@ function WorldVisualizer (world) {
 			bmd.ctx.closePath();
 			bmd.ctx.stroke();
 
+			//var r = 1-agent.health/agent.constants.MAX_HEALTH;
+			//var g = agent.health/agent.constants.MAX_HEALTH;
+			//var b = 0.5;
+
 			// Draw circle
-			bmd.ctx.fillStyle = '#999999';
+			bmd.ctx.fillStyle = '#999999';//rgb(r,g,b);
 			bmd.ctx.beginPath();
-			bmd.ctx.arc(agent.x, agent.y, agentRadius, 0, Math.PI*2, true); 
+			bmd.ctx.arc(agent.x, agent.y, 0.5*agent.fullness + 10, 0, Math.PI*2, true); 
 			bmd.ctx.closePath();
 			bmd.ctx.fill();
 			// Draw direction indicator

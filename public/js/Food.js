@@ -4,7 +4,7 @@
 
 function Food (world, x,y) {
 	this.world = world;
-	this.id = Food.prototype.foodCount++;
+	this.id = 'f' + Food.prototype.foodCount++;
 
     // Position and orientation
     this.x = x;
