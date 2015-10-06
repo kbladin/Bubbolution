@@ -29,16 +29,22 @@
 </head>
 <body>
 
+	<div id="control">
+		<!-- value = 10 -> 1 update per wait -->
+		<span>Updates per wait:</span>
+		<span id="updatesPerWait" style="width: 200px;"></span>
+		<input type="range" id="slider" value="10">
+	</div>
+
 	<script type="text/javascript">
 		var world = new World(800, 600);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world);
 		var statsMonitor = new StatsMonitor(world, document.body);
 
-		statsMonitor.start({waitTime: 1000});
+		statsMonitor.start({waitTime: 100});
 
 		simulator.start({
-			updatesPerWait: 40,
 			waitTime: 10
 		});
 

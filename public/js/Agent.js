@@ -45,7 +45,6 @@ Agent.prototype.constants = {
 // Updates the Agent's fullness and health
 Agent.prototype.update = function() {
 	if(this.fullness > 0){
-		this.fullness = Math.min(this.fullness, this.constants.MAX_FULLNESS);
 		this.fullness -= this.constants.FULLNESS_DECREASE_RATE;
 		if(this.fullness > this.constants.MAX_FULLNESS*0.5 &&
 			this.health < this.constants.MAX_HEALTH)
@@ -163,6 +162,7 @@ Agent.prototype.isReachable = function (o) {
 Agent.prototype.eat = function(food){
 	if(this.world.removeFood(food)){
 		this.fullness += this.constants.FULLNESS_PER_FOOD;
+		this.fullness = Math.min(this.fullness, this.constants.MAX_FULLNESS);
 	}
 }
 

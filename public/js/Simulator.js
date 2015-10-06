@@ -27,8 +27,17 @@ function Simulator (world) {
 
 Simulator.prototype.start = function(simParams) {
 	this.updatesPerWait = simParams.updatesPerWait;
+
+	var slider = document.getElementById('slider');
+	var updatesPerWaitElement = document.getElementById('updatesPerWait');
+
 	var thisSimulator = this;
 	this.loop = setInterval(function() {
+
+		var sliderVal = +slider.value;
+		thisSimulator.updatesPerWait = Math.ceil(sliderVal*sliderVal * 0.0001 * 50);
+		updatesPerWaitElement.textContent = thisSimulator.updatesPerWait;
+
 		thisSimulator.world.numUpdates += thisSimulator.updatesPerWait;
 		for (var n = 0; n < thisSimulator.updatesPerWait; n++) {
 
