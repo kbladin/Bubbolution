@@ -7,17 +7,23 @@ function Agent (world, x, y, angle) {
 	this.world = world;
 	this.id = 'a' + agentCount++;
 
+	//Brain
+	this.brain = new Brain(this);
+
     // Position and orientation
     this.x = x;
     this.y = y;
     this.angle = angle;
     this.alive = true;
 
-    // Neural network input
+    // Internal state
   	this.fullness = this.constants.MAX_FULLNESS/2;
     this.health = this.constants.MAX_HEALTH/2;
+    this.age = 0;
 	
 };
+
+Agent.prototype.AVAILABLE_ACTIONS = ["findAndEatFood", "findAndMateAgent"];
 
 // STATIC CONSTANTS
 Agent.prototype.constants = {
@@ -26,6 +32,7 @@ Agent.prototype.constants = {
 
 	MAX_FULLNESS: 100,
 	MAX_HEALTH: 100,
+	MAX_AGE: 300,
 	
 	ATTENTION_RADIUS: 100,
 	REACHABLE_RADIUS: 10,
@@ -39,6 +46,13 @@ Agent.prototype.constants = {
 
 	MATING_FULLNESS_COST: 50,
 	MATING_HEALTH_COST: 20,
+};
+
+
+Agent.prototype.act = function() {
+	var actionName = this.brain.getAction();
+	this[actionName].call(this);
+	this.update();
 };
 
 
@@ -59,6 +73,12 @@ Agent.prototype.update = function() {
 			this.world.removeAgent(this);
 			this.world.numDeadAgents++; //Ugly to do stats things here
 		}
+	}
+	this.age++;
+	if(this.age > this.constants.MAX_AGE){
+		this.alive = false;
+		this.world.removeAgent(this);
+		this.world.numDeadAgents++; //Ugly to do stats things here
 	}
 };
 
@@ -92,12 +112,9 @@ Agent.prototype.walk = function() {
 		this.x = Math.min(this.world.width, Math.max(this.x, 0));
 		this.y = Math.min(this.world.height, Math.max(this.y, 0));
 	}
-
-	this.update();
 };
 
 Agent.prototype.idle = function(){
-	this.update();
 	return;
 }
 
@@ -114,7 +131,6 @@ Agent.prototype.walkInDirection = function(angle) {
 	var dirY = Math.sin(this.angle + angle);
 	this.x += dirX * this.constants.WALKSPEED;
 	this.y += dirY * this.constants.WALKSPEED;
-	this.update();
 };
 
 Agent.prototype.turnLeft = function() {
@@ -167,6 +183,11 @@ Agent.prototype.eat = function(food){
 }
 
 Agent.prototype.mate = function(agent) {
+	if(this.health < this.constants.MATING_HEALTH_COST || 
+		agent.health < agent.constants.MATING_HEALTH_COST){
+
+	}
+
 	// Both mating agents lose fullness
 	this.fullness -= this.constants.MATING_FULLNESS_COST;
 	this.fullness = Math.max(this.fullness, 0);
@@ -268,7 +289,6 @@ Agent.prototype.smartAction = function(){
 		this.findAndEatFood();
 	}
 }
-
 
 
 Agent.prototype.toString = function () {
