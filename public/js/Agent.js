@@ -14,8 +14,8 @@ function Agent (world, x, y, angle) {
     this.alive = true;
 
     // Neural network input
-  	this.fullness = 100
-    this.health = 100;
+  	this.fullness = this.constants.MAX_FULLNESS/2;
+    this.health = this.constants.MAX_HEALTH/2;
 	
 };
 
@@ -42,6 +42,7 @@ Agent.prototype.constants = {
 };
 
 
+// Updates the Agent's fullness and health
 Agent.prototype.update = function() {
 	if(this.fullness > 0){
 		this.fullness = Math.min(this.fullness, this.constants.MAX_FULLNESS);
@@ -55,6 +56,7 @@ Agent.prototype.update = function() {
 	else{
 		this.health -= this.constants.HEALTH_DECREASE_RATE;
 		if(this.health < 0){
+			this.alive = false;
 			this.world.removeAgent(this);
 			this.world.numDeadAgents++; //Ugly to do stats things here
 		}
@@ -96,7 +98,7 @@ Agent.prototype.walk = function() {
 };
 
 Agent.prototype.idle = function(){
-	// Do nothing
+	this.update();
 	return;
 }
 
@@ -127,14 +129,6 @@ Agent.prototype.turnRight = function() {
 	this.angle += this.constants.ANGULAR_SPEED;
 	if(Math.PI < this.angle){
 		this.angle -= 2*Math.PI;
-	}
-};
-
-Agent.prototype.attack = function() {
-	var agents = this.world.getAgentsWithinRadius(this, this.constants.REACHABLE_RADIUS, true);
-	if(agents){
-		var targetAgent = agents[0];
-		targetAgent.receiveAttackedFrom(this);
 	}
 };
 
@@ -180,13 +174,13 @@ Agent.prototype.mate = function(agent) {
 	agent.fullness -= agent.constants.MATING_FULLNESS_COST;
 	agent.fullness = Math.max(agent.fullness, 0);
 
-	// Both mating agetns lose health
+	// Both mating agents lose health
 	this.health -= this.constants.MATING_HEALTH_COST;
 	agent.health -= agent.constants.MATING_HEALTH_COST;
 
 	// Give birth to baby agent
-	var x = this.x + 10*Math.random();
-	var y = this.y + 10*Math.random();
+	var x = this.x + this.constants.ATTENTION_RADIUS*(Math.random()-0.5);
+	var y = this.y + this.constants.ATTENTION_RADIUS*(Math.random()-0.5);
 	var angle = this.angle + Math.PI;
 	var babyAgent = new Agent(this.world, x, y, angle);
 
@@ -195,6 +189,8 @@ Agent.prototype.mate = function(agent) {
 
 	this.world.agents.push(babyAgent);
 	this.world.numBornAgents++; // ugly to do stats things here!
+
+	console.log(this.id + ' mating ' + agent.id + ' -> ' + babyAgent.id);
 };
 
 
@@ -265,7 +261,7 @@ Agent.prototype.findAndMateAgent = function() {
 
 // This action is only for testing basic behavior
 Agent.prototype.smartAction = function(){
-	if(this.health > 0.6 * this.constants.MAX_HEALTH){
+	if(this.health > 0.8 * this.constants.MAX_HEALTH){
 		this.findAndMateAgent();
 	}
 	else{

@@ -7,9 +7,9 @@ function Simulator (world) {
 	this.updatesPerWait = 1;
 
 
-	for (var i = 0; i < 2; i++) {
+	for (var i = 0; i < 1; i++) {
 		var pos = world.getRandomPosition();
-		var foodSpawner = new FoodSpawner(world, pos.x, pos.y, 100, 100);
+		var foodSpawner = new FoodSpawner(world, pos.x, pos.y, 200, 10);
 		world.foodSpawners.push(foodSpawner);
 	}
 

@@ -30,5 +30,4 @@ FoodSpawner.prototype.spawn = function () {
 	
 	var food = new Food(this.world, x, y)
 	this.world.foods.push(food);
-	console.log('spawing food');
 }

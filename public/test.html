@@ -23,7 +23,7 @@
 
 	<style type="text/css">
 		body {
-			margin: 0;
+    		margin: 0;
 		}
 	</style>
 </head>
@@ -31,20 +31,14 @@
 
 	<script type="text/javascript">
 		var world = new World(800, 600);
-		var simulator = new Simulator(world);
-		var visualizer = new WorldVisualizer(world);
-		var statsMonitor = new StatsMonitor(world, document.body);
+		var a = new Agent(world, 0, 0, 0);
+		var b = new Agent(world, 4, 0, 0);
 
-		statsMonitor.start({waitTime: 1000});
+		world.agents.push(a);
+		world.agents.push(b);
 
-		simulator.start({
-			updatesPerWait: 40,
-			waitTime: 10
-		});
+		console.log("a.extractFeatures(): " + a.extractFeatures());
 
-		setTimeout(function () {
-			simulator.stop();
-		}, 25000);
 	</script>
 </body>
 </html>

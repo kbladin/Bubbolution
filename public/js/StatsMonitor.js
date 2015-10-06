@@ -27,6 +27,10 @@ function StatsMonitor (world, parentElement) {
 		label: "num dead agents", 
 		getValue: function(){return world.numDeadAgents;}
 	});
+	this.monitorData.push({
+		label: "num food spawners",
+		getValue: function(){return world.foodSpawners.length;}
+	})
 	
 	this.initDomElements(parentElement);
 };
