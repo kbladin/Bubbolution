@@ -67,6 +67,7 @@ function WorldVisualizer (world, width, height) {
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
+				/*
 				if (world.buildMaterial[i][j] > 0) {
 					// Draw circle
 					bmd.ctx.fillStyle = rgb(50,50,50);
@@ -75,6 +76,7 @@ function WorldVisualizer (world, width, height) {
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
+				*/
 				if (world.entrances[i][j] > 0) {
 					// Draw circle
 					bmd.ctx.fillStyle = rgb(255,0,0);

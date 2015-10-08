@@ -18,9 +18,10 @@ function Ant (world, x, y, angle) {
     // Determines behavior
     this.carryingFood = false;
     this.carryingBuildMaterial = false;
+    this.insideNest = false;
 };
 
-Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome"];
+Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "digNest"];
 
 // STATIC CONSTANTS
 Ant.prototype.constants = {
@@ -41,18 +42,23 @@ Ant.prototype.update = function() {
 		this.carryingFood = true;
 		this.foodPheromone = 1;
 	}
+	/*
 	// Check if build material is found
 	if (!this.carryingBuildMaterial && this.world.buildMaterial[this.x][this.y] > 0){
 		this.world.buildMaterial[this.x][this.y]--;
 		this.carryingBuildMaterial = true;
 	}
+	*/
+	/*
 	// Check if nest is found
-	if (this.carryingBuildMaterial && this.isReachable(this.world.nest)) {
+	if (this.carryingBuildMaterial && this.getNumReachable(this.world.nest)) {
 		this.carryingBuildMaterial = false;
 		this.world.nest[this.x][this.y]++;
 	}
+	*/
 	// Check if home is found
 	if (world.entrances[this.x][this.y]) {
+		this.insideNest = !this.insideNest;
 		this.carryingFood = false;
 		this.carryingBuildMaterial = false;
 		this.homePheromone = 1;
@@ -73,47 +79,50 @@ Ant.prototype.update = function() {
 //
 
 Ant.prototype.walk = function() {
-	switch(this.angle) {
-	    case 0:
-	        this.x++;
-	        break;
-	    case 1:
-	        this.x++;
-	        this.y++;
-	        break;
-	    case 2:
-	        this.y++;
-	        break;
-	    case 3:
-	        this.x--;
-	        this.y++;
-	        break;
-	    case 4:
-	        this.x--;
-	        break;
-	    case 5:
-	        this.x--;
-	        this.y--;
-	        break;
-	    case 6:
-	        this.y--;
-	        break;
-	    case 7:
-	        this.x++;
-	        this.y--;
-	        break;
-	    default:
-	        break;
+	// Sensorposition to check if it can walk forward in a nest
+	var sensorPosition = this.getRelativeSensorPosition().center;
+	if (this.insideNest && this.world.nest[this.x + sensorPosition.x][this.y + sensorPosition.y] ) {
+		switch(this.angle) {
+		    case 0:
+		        this.x++;
+		        break;
+		    case 1:
+		        this.x++;
+		        this.y++;
+		        break;
+		    case 2:
+		        this.y++;
+		        break;
+		    case 3:
+		        this.x--;
+		        this.y++;
+		        break;
+		    case 4:
+		        this.x--;
+		        break;
+		    case 5:
+		        this.x--;
+		        this.y--;
+		        break;
+		    case 6:
+		        this.y--;
+		        break;
+		    case 7:
+		        this.x++;
+		        this.y--;
+		        break;
+		    default:
+		        break;
+		}
+		if(this.x < 2)
+			this.x = 2;
+		if(this.x > this.world.width - 2)
+			this.x = this.world.width - 2;
+		if(this.y < 2)
+			this.y = 2;
+		if(this.y > this.world.height - 2)
+			this.y = this.world.height - 2;
 	}
-
-	if(this.x < 2)
-		this.x = 2;
-	if(this.x > this.world.width - 2)
-		this.x = this.world.width - 2;
-	if(this.y < 2)
-		this.y = 2;
-	if(this.y > this.world.height - 2)
-		this.y = this.world.height - 2;
 	return;
 };
 
@@ -135,6 +144,25 @@ Ant.prototype.turnRight = function() {
 	return;
 };
 
+Ant.prototype.dig = function() {
+	var sensorPosition = this.getRelativeSensorPosition();
+	var numReachableSensor = 0;
+	for (var i = -1; i <= 1; i++) {
+		for (var j = -1; j <= 1; j++) {
+			if (this.world.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
+				numReachableSensor++;
+		};
+	};
+	var numReachable = this.getNumReachable(this.world.nest);
+
+	//console.log(sensorPosition);
+	if (!this.world.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
+		(numReachableSensor == 3 || numReachableSensor == 2) &&
+		(numReachable >2 && numReachable < 6)) {
+		this.world.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
+	};
+}
+
 Ant.prototype.averagePheromoneLocally = function(pheromoneMap) {
 	var pheromone = 0;
 	for (var i = -1; i <= 1; i++) {
@@ -146,7 +174,7 @@ Ant.prototype.averagePheromoneLocally = function(pheromoneMap) {
 	pheromoneMap[this.x][this.y] = pheromone;
 }
 
-Ant.prototype.isReachable = function(map) {
+Ant.prototype.getNumReachable = function(map) {
 	var numReachable = 0;
 	for (var i = -1; i <= 1; i++) {
 		for (var j = -1; j <= 1; j++) {
@@ -154,10 +182,7 @@ Ant.prototype.isReachable = function(map) {
 				numReachable++;
 		};
 	};
-	if (numReachable >= 3)
-		return true;
-	else
-		return false;
+	return numReachable;
 }
 
 Ant.prototype.GetDirectionToHighestPheromone = function(pheromoneMap) {
@@ -199,6 +224,84 @@ Ant.prototype.GetDirectionToHighestPheromone = function(pheromoneMap) {
 	return pheromoneDirection;
 }
 
+Ant.prototype.getRelativeSensorPosition = function() {
+	var sensorPoints = {};
+	sensorPoints.left = {};
+	sensorPoints.center = {};
+	sensorPoints.right = {};
+
+	switch(this.angle) {
+	    case 0:
+	        sensorPoints.left.x = 1;
+	        sensorPoints.left.y = -1;
+	        sensorPoints.center.x = 1;
+	        sensorPoints.center.y = 0;
+	        sensorPoints.right.x = 1;
+	        sensorPoints.right.y = 1;
+	        break;
+	    case 1:
+	        sensorPoints.left.x = 1;
+	        sensorPoints.left.y = 0;
+	        sensorPoints.center.x = 1;
+	        sensorPoints.center.y = 1;
+	        sensorPoints.right.x = 0;
+	        sensorPoints.right.y = 1;
+	        break;
+	    case 2:
+	        sensorPoints.left.x = 1;
+	        sensorPoints.left.y = 1;
+	        sensorPoints.center.x = 0;
+	        sensorPoints.center.y = 1;
+	        sensorPoints.right.x = -1;
+	        sensorPoints.right.y = 1;
+	        break;
+	    case 3:
+	        sensorPoints.left.x = 1;
+	        sensorPoints.left.y = 0;
+	        sensorPoints.center.x = -1;
+	        sensorPoints.center.y = 1;
+	        sensorPoints.right.x = -1;
+	        sensorPoints.right.y = 0;
+	        break;
+	    case 4:
+	        sensorPoints.left.x = -1;
+	        sensorPoints.left.y = 1;
+	        sensorPoints.center.x = -1;
+	        sensorPoints.center.y = 0;
+	        sensorPoints.right.x = -1;
+	        sensorPoints.right.y = -1;
+	        break;
+	    case 5:
+	        sensorPoints.left.x = -1;
+	        sensorPoints.left.y = 0;
+	        sensorPoints.center.x = -1;
+	        sensorPoints.center.y = -1;
+	        sensorPoints.right.x = 0;
+	        sensorPoints.right.y = -1;
+	        break;
+	    case 6:
+	        sensorPoints.left.x = -1;
+	        sensorPoints.left.y = -1;
+	        sensorPoints.center.x = 0;
+	        sensorPoints.center.y = -1;
+	        sensorPoints.right.x = 1;
+	        sensorPoints.right.y = -1;
+	        break;
+	    case 7:
+	        sensorPoints.left.x = 0;
+	        sensorPoints.left.y = -1;
+	        sensorPoints.center.x = 1;
+	        sensorPoints.center.y = -1;
+	        sensorPoints.right.x = 1;
+	        sensorPoints.right.y = 0;
+	        break;
+	    default:
+	        break;
+	}
+	return sensorPoints;
+}
+
+
 //
 // HIGH LEVEL ACTIONS
 //
@@ -239,3 +342,14 @@ Ant.prototype.lookForFood = function() {
 	else
 		this.wander();
 }
+
+Ant.prototype.digNest = function() {
+	if (!this.insideNest)
+		this.lookForHome();
+	else {
+		this.wander();
+		this.dig();
+	}
+
+}
+

@@ -12,7 +12,7 @@ function World (width, height) {
 
 	this.food = new Array(width);
 	this.nest = new Array(width);
-	this.buildMaterial = new Array(width);
+	//this.buildMaterial = new Array(width);
 	this.entrances = new Array(width);
 
 	for (var i = 0; i < width; i++) {
@@ -21,7 +21,7 @@ function World (width, height) {
 
 	  this.food[i] = new Array(height);
 	  this.nest[i] = new Array(height);
-	  this.buildMaterial[i] = new Array(height);
+	  //this.buildMaterial[i] = new Array(height);
 	  this.entrances[i] = new Array(height);
 	}
 	for (var i = 0; i < width; i++) {
@@ -46,8 +46,8 @@ function World (width, height) {
 				j < height/2 + 3)
 				this.nest[i][j] = 1;
 
-			if (Math.random() > 0.8)
-				this.buildMaterial[i][j] = 1;
+			//if (Math.random() > 0.8)
+				//this.buildMaterial[i][j] = 1;
 		}
 	}
 	this.entrances[width/2][height/2] = 1;

@@ -18,5 +18,6 @@ Brain.prototype.getAction = function () {
 	else {
 		bestAction = "lookForHome";
 	}
+	bestAction = "digNest";
 	return bestAction;
 }
