@@ -13,7 +13,7 @@ function Ant (world, x, y, angle) {
 
     // Pheromones
     this.foodPheromone = 0;
-    this.homePheromone = 100;
+    this.homePheromone = 1;
 
     // Determines behavior
     this.carryingFood = false;
@@ -24,7 +24,7 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome"];
 
 // STATIC CONSTANTS
 Ant.prototype.constants = {
-	WALKSPEED: 9.9,
+
 };
 
 Ant.prototype.act = function() {
@@ -39,19 +39,23 @@ Ant.prototype.update = function() {
 	if (!this.carryingBuildMaterial && !this.carryingFood && this.world.food[this.x][this.y] > 0){
 		this.world.food[this.x][this.y]--;
 		this.carryingFood = true;
-		this.foodPheromone = 100;
+		this.foodPheromone = 1;
 	}
 	// Check if build material is found
 	if (!this.carryingBuildMaterial && this.world.buildMaterial[this.x][this.y] > 0){
 		this.world.buildMaterial[this.x][this.y]--;
 		this.carryingBuildMaterial = true;
 	}
-
+	// Check if nest is found
+	if (this.carryingBuildMaterial && this.isReachable(this.world.nest)) {
+		this.carryingBuildMaterial = false;
+		this.world.nest[this.x][this.y]++;
+	}
 	// Check if home is found
 	if (world.entrances[this.x][this.y]) {
 		this.carryingFood = false;
 		this.carryingBuildMaterial = false;
-		this.homePheromone = 200;
+		this.homePheromone = 1;
 	}
 
 	// Spread pheromones
@@ -59,8 +63,8 @@ Ant.prototype.update = function() {
 	world.foodPheromones[this.x][this.y] = Math.max(world.foodPheromones[this.x][this.y], this.foodPheromone);
 
 	// Loose pheromones
-	this.homePheromone *= 0.9;
-	this.foodPheromone *= 0.9;
+	this.homePheromone -= 0.01;
+	this.foodPheromone -= 0.01;
 
 };
 
@@ -140,6 +144,20 @@ Ant.prototype.averagePheromoneLocally = function(pheromoneMap) {
 	};
 	pheromone /= 9;
 	pheromoneMap[this.x][this.y] = pheromone;
+}
+
+Ant.prototype.isReachable = function(map) {
+	var numReachable = 0;
+	for (var i = -1; i <= 1; i++) {
+		for (var j = -1; j <= 1; j++) {
+			if (map[this.x + i][this.y + j])
+				numReachable++;
+		};
+	};
+	if (numReachable >= 3)
+		return true;
+	else
+		return false;
 }
 
 Ant.prototype.GetDirectionToHighestPheromone = function(pheromoneMap) {

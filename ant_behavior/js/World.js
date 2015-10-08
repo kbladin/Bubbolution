@@ -29,6 +29,7 @@ function World (width, height) {
 			this.homePheromones[i][j] = 0;
 			this.foodPheromones[i][j] = 0;
 			this.food[i][j] = 0;
+			this.nest[i][j] = 0;
 			if (i > width/2 + 50 - 10 &&
 				i < width/2 + 50 + 10 &&
 				j > height/2 + 50 - 10 &&

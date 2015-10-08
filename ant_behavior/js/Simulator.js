@@ -36,12 +36,12 @@ Simulator.prototype.start = function(simParams) {
 			for (var i = 0; i < thisSimulator.world.width; i++) {
 				for (var j = 0; j < thisSimulator.world.height; j++) {
 					if (thisSimulator.world.homePheromones[i][j] > 0) {
-						thisSimulator.world.homePheromones[i][j] *= 0.99;
+						thisSimulator.world.homePheromones[i][j] *= 0.9999;
 						if (thisSimulator.world.homePheromones[i][j] < 0.001)
 							thisSimulator.world.homePheromones[i][j] = 0;
 					}
 					if (thisSimulator.world.foodPheromones[i][j] > 0) {
-						thisSimulator.world.foodPheromones[i][j] *= 0.99;
+						thisSimulator.world.foodPheromones[i][j] *= 0.995;
 						if (thisSimulator.world.foodPheromones[i][j] < 0.001)
 							thisSimulator.world.foodPheromones[i][j] = 0;
 					}
