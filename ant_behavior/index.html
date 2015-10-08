@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" id="html">
+<head> 
+	<meta charset="UTF-8" />
+	<title>Bubbolution tills vidare</title>
+
+	<!-- Libs -->
+	<script type="text/javascript" src="lib/phaser.min.js"></script>
+	<script type="text/javascript" src="lib/synaptic.min.js"></script>
+
+	<!-- Evolution stuff -->
+	<script type="text/javascript" src="js/Ant.js"></script>
+	<script type="text/javascript" src="js/AgentAlgebra.js"></script>
+	<script type="text/javascript" src="js/Food.js"></script>
+	<script type="text/javascript" src="js/FoodSpawner.js"></script>
+	<script type="text/javascript" src="js/Brain.js"></script>
+	<script type="text/javascript" src="js/Simulator.js"></script>
+	<script type="text/javascript" src="js/World.js"></script>
+	<script type="text/javascript" src="js/WorldVisualizer.js"></script>
+	<script type="text/javascript" src="js/StatsMonitor.js"></script>
+
+	<style type="text/css">
+		body {
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="control">
+		<!-- value = 10 -> 1 update per wait -->
+		<span>Updates per wait:</span>
+		<span id="updatesPerWait" style="width: 200px;"></span>
+		<input type="range" id="slider" value="10">
+	</div>
+
+	<script type="text/javascript">
+		var world = new World(200, 150);
+		var simulator = new Simulator(world);
+		var visualizer = new WorldVisualizer(world, 800, 600);
+		//var statsMonitor = new StatsMonitor(world, document.body);
+
+		//statsMonitor.start({waitTime: 100});
+
+		simulator.start({
+			waitTime: 10
+		});
+
+		setTimeout(function () {
+			simulator.stop();
+		}, 2500000);
+	</script>
+</body>
+</html>
