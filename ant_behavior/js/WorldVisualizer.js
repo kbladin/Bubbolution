@@ -43,8 +43,8 @@ function WorldVisualizer (world, width, height) {
 				};
 				if (world.homePheromones[i][j] > 0) {
 					// Draw circle
-					var intensity = world.homePheromones[i][j];
-					bmd.ctx.fillStyle = "rgba(250,250,0,0.5)";
+					var intensity = world.homePheromones[i][j].toFixed(5);
+					bmd.ctx.fillStyle = "rgba(250,250,0," + intensity + ")";
 					bmd.ctx.beginPath();
 					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
 					bmd.ctx.closePath();
@@ -52,8 +52,8 @@ function WorldVisualizer (world, width, height) {
 				};
 				if (world.foodPheromones[i][j] > 0) {
 					// Draw circle
-					var intensity = world.foodPheromones[i][j];
-					bmd.ctx.fillStyle = "rgba(0,250,255,0.5)";
+					var intensity = world.foodPheromones[i][j].toFixed(5);
+					bmd.ctx.fillStyle = "rgba(0,250,255," + intensity + ")";
 					bmd.ctx.beginPath();
 					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
 					bmd.ctx.closePath();
@@ -77,7 +77,7 @@ function WorldVisualizer (world, width, height) {
 				};
 				if (world.entrances[i][j] > 0) {
 					// Draw circle
-					bmd.ctx.fillStyle = rgb(0,0,0);
+					bmd.ctx.fillStyle = rgb(255,0,0);
 					bmd.ctx.beginPath();
 					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
 					bmd.ctx.closePath();
