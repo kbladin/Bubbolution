@@ -50,6 +50,22 @@ World.prototype.createGrid = function (value) {
 	return grid;
 };
 
+World.prototype.forEachValInGrid = function(grid, callback) {
+	for (var i = 0; i < this.width; i++) {
+		for (var j = 0; j < this.height; j++) {
+			callback(grid[i][j]);
+		}
+	}
+};
+
+World.prototype.sumGridValues = function(grid) {
+	var sum = 0
+	this.forEachValInGrid(grid, function (val) {
+		sum += val;
+	});
+	return sum;
+};
+
 // x: x-position to test
 // y: y-position to test
 // cx: x-position of center of rectangle 

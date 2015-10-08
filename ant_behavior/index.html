@@ -38,9 +38,9 @@
 		var world = new World(200, 150);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world, 800, 600);
-		//var statsMonitor = new StatsMonitor(world, document.body);
+		var statsMonitor = new StatsMonitor(world, document.body);
 
-		//statsMonitor.start({waitTime: 100});
+		statsMonitor.start({waitTime: 1000});
 
 		simulator.start({
 			waitTime: 10
