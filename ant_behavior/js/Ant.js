@@ -18,11 +18,17 @@ function Ant (world, x, y, angle) {
     this.homePheromone = 1;
     this.exitPheromone = 0;
 
+    // Timers
+    this.homeSickTimer = 0;
+
     // Determines behavior
     this.carryingFood = false;
     this.carryingDirt = false;
     this.insideNest = false;
+    /*
     this.lostInsideNest = false;
+    this.lostOutsideNest = false;
+    */
 };
 
 Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest"];
@@ -32,6 +38,9 @@ Ant.prototype.STATIC = {
 	HOME_PHERMONE_DECREASE: 0.01,
 	EXIT_PHERMONE_DECREASE: 0.01,
 	FOOD_PHERMONE_DECREASE: 0.01,
+
+	MAX_INSIDE_HOMESICKNESS: 100,
+	MAX_OUTSIDE_HOMESICKNESS: 200,
 };
 
 Ant.prototype.act = function() {
@@ -63,11 +72,12 @@ Ant.prototype.update = function() {
 			this.insideNest = false;
 			this.carryingDirt = false;
 			this.homePheromone = 1;
-			this.lostInsideNest = false;
-		}
+			this.homeSickTimer = 0;
+			//this.lostInsideNest = false;
+		}/*
 		else if (this.exitPheromone <= 0) {
 			this.lostInsideNest = true;
-		}
+		}*/
 	} else {
 		this.exitPheromone = 0;
 		// Check if home is found and outside
@@ -75,6 +85,7 @@ Ant.prototype.update = function() {
 			this.insideNest = true;
 			this.carryingFood = false;
 			this.exitPheromone = 1;
+			this.homeSickTimer = 0;
 			//this.lostInsideNest = false;
 		}
 		// Check if food is found
@@ -94,6 +105,9 @@ Ant.prototype.update = function() {
 	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
 	this.exitPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
+
+	// Update timer
+	this.homeSickTimer++;
 };
 
 //
