@@ -5,7 +5,6 @@
 function Simulator (world) {
 	this.world = world;
 	this.updatesPerWait = 1;
-
 };
 
 Simulator.prototype.start = function(simParams) {

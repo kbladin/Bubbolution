@@ -30,7 +30,9 @@ World.prototype.initGridData = function() {
 	var thisWorld = this;
 
 	this.homePheromones = Utils.createGrid(w, h, 0);
+	this.exitPheromones = Utils.createGrid(w, h, 0);
 	this.foodPheromones = Utils.createGrid(w, h, 0);
+
 	this.food = Utils.createGrid(w, h, function (i,j){
 		if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 			Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
