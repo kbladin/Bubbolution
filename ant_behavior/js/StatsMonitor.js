@@ -27,6 +27,14 @@ function StatsMonitor (world, parentElement) {
 		label: "total food phermones", 
 		getValue: function(){return world.sumGridValues(world.foodPheromones).toFixed(2);}
 	});
+	this.monitorData.push({
+		label: "anthill food", 
+		getValue: function(){return world.anthills[0].food;}
+	});
+	this.monitorData.push({
+		label: "anthill buildMaterial", 
+		getValue: function(){return world.anthills[0].buildMaterial;}
+	});
 	
 	this.initDomElements(parentElement);
 };

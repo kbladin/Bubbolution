@@ -1,7 +1,8 @@
 var antCount = 0;
 
-function Ant (world, x, y, angle) {
+function Ant (world, anthill, x, y, angle) {
 	this.world = world;
+	this.anthill = anthill;
 
 	//Brain
 	this.brain = new Brain(this);
@@ -50,14 +51,19 @@ Ant.prototype.update = function() {
 		this.carryingBuildMaterial = true;
 	}
 	// Check if nest is found
-	if (this.carryingBuildMaterial && this.isReachable(this.world.nest)) {
-		this.carryingBuildMaterial = false;
-		this.world.nest[this.x][this.y]++;
+	if (this.carryingBuildMaterial && this.isReachable(this.anthill.nest)) {		
+		if(this.carryingBuildMaterial){
+			this.anthill.buildMaterial++;
+			this.anthill.nest[this.x][this.y]++;
+			this.carryingBuildMaterial = false;
+		}
 	}
 	// Check if home is found
-	if (world.entrances[this.x][this.y]) {
-		this.carryingFood = false;
-		this.carryingBuildMaterial = false;
+	if (world.entranceToAnthillAt(this.x,this.y) === this.anthill) {
+		if(this.carryingFood){
+			this.anthill.food++;
+			this.carryingFood = false;	
+		}
 		this.homePheromone = 1;
 	}
 
@@ -138,17 +144,6 @@ Ant.prototype.turnRight = function() {
 	return;
 };
 
-Ant.prototype.averagePheromoneLocally = function(pheromoneMap) {
-	var pheromone = 0;
-	for (var i = -1; i <= 1; i++) {
-		for (var j = -1; j <= 1; j++) {
-			pheromone += pheromoneMap[this.x + i][this.y + j];
-		};
-	};
-	pheromone /= 9;
-	pheromoneMap[this.x][this.y] = pheromone;
-}
-
 Ant.prototype.isReachable = function(map) {
 	var numReachable = 0;
 	for (var i = -1; i <= 1; i++) {
@@ -163,7 +158,7 @@ Ant.prototype.isReachable = function(map) {
 		return false;
 }
 
-Ant.prototype.GetDirectionToHighestPheromone = function(pheromoneMap) {
+Ant.prototype.getDirectionToHighestPheromone = function(pheromoneMap) {
 	var pheromoneDirection = -1;
 	var maxPheromoneValue = 0;
 
@@ -219,7 +214,7 @@ Ant.prototype.wander = function() {
 
 Ant.prototype.lookForHome = function() {
 	// Find the way
-	var pheromoneDirectionToHome = this.GetDirectionToHighestPheromone(world.homePheromones)
+	var pheromoneDirectionToHome = this.getDirectionToHighestPheromone(world.homePheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToHome != -1 && random > 0.1) {
@@ -232,7 +227,7 @@ Ant.prototype.lookForHome = function() {
 
 Ant.prototype.lookForFood = function() {
 	// Find the way
-	var pheromoneDirectionToFood = this.GetDirectionToHighestPheromone(world.foodPheromones)
+	var pheromoneDirectionToFood = this.getDirectionToHighestPheromone(world.foodPheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToFood != -1 && random > 0.1) {

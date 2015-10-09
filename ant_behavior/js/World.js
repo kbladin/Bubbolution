@@ -8,46 +8,49 @@ function World (width, height) {
 
 	this.initGridData();
 
-	this.numUpdates = 0;	
+	this.numUpdates = 0;
+
 	this.ants = [];
+	this.anthills = [];
+
+	this.anthills.push(new Anthill(this, 1*width/4, height/2, 100));
+	this.anthills.push(new Anthill(this, 3*width/4, height/2, 100));
+
 };
 
 World.prototype.initGridData = function() {
-	//Convencience vars for center of world
+	//Convencience vars
 	var cx = this.width/2;
 	var cy = this.height/2;
+	var w = this.width;
+	var h = this.height;
+
 
 	// Create ref to this in current scope for passing to closures
 	var thisWorld = this;
 
-	this.homePheromones = this.createGrid(0);
-	this.foodPheromones = this.createGrid(0);
-	this.food = this.createGrid(function (i,j){
-		if (thisWorld.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
-			thisWorld.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
+	this.homePheromones = Utils.createGrid(w, h, 0);
+	this.foodPheromones = Utils.createGrid(w, h, 0);
+	this.food = Utils.createGrid(w, h, function (i,j){
+		if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
+			Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
 			return 50;
-		} 
+		}
 		return 0;
 	});
-	this.nest = this.createGrid(function (i,j) {
-		return thisWorld.insideRect(i, j, cx, cy, 6, 6) ? 1 : 0;
-	});
-	this.buildMaterial = this.createGrid(function () {
+	this.buildMaterial = Utils.createGrid(w, h, function () {
 		return Math.random() > 0.9 ? 1 : 0;
 	});
-	this.entrances = this.createGrid(0);
-	this.entrances[cx][cy] = 1;
 };
 
-World.prototype.createGrid = function (value) {
-	var grid = new Array(this.width);
-	for (var i = 0; i < this.width; i++) {
-		grid[i] = new Array(this.height);
-		for (var j = 0; j < this.height; j++) {
-			grid[i][j] = typeof value === 'function' ? value(i, j) : value;
+World.prototype.entranceToAnthillAt = function(x, y) {
+	for(var i = 0; i<this.anthills.length; ++i){
+		var anthill = this.anthills[i];
+		if(anthill.x === x && anthill.y === y){
+			return anthill;
 		}
 	}
-	return grid;
+	return null;
 };
 
 World.prototype.forEachValInGrid = function(grid, callback) {
@@ -66,12 +69,3 @@ World.prototype.sumGridValues = function(grid) {
 	return sum;
 };
 
-// x: x-position to test
-// y: y-position to test
-// cx: x-position of center of rectangle 
-// cy: y-position of center of rectangle
-// w: width of rectangle   
-// h: height of rectangle 
-World.prototype.insideRect = function(x, y, cx, cy, w, h) {
-	return (Math.abs(x - cx) <= w / 2) && (Math.abs(y - cy) <= h / 2);
-};
