@@ -8,29 +8,25 @@ function StatsMonitor (world, parentElement) {
 
 	// Populate monitor data
 	this.monitorData.push({
-		label: "num agents", 
-		getValue: function(){return world.agents.length;}
-	});
-	this.monitorData.push({
-		label: "num foods",
-		getValue: function(){return world.foods.length;}
-	});
-	this.monitorData.push({
 		label: "num updates", 
 		getValue: function(){return world.numUpdates;}
 	});
 	this.monitorData.push({
-		label: "num born agents", 
-		getValue: function(){return world.numBornAgents;}
+		label: "num ants", 
+		getValue: function(){return world.ants.length;}
 	});
 	this.monitorData.push({
-		label: "num dead agents", 
-		getValue: function(){return world.numDeadAgents;}
+		label: "num foods",
+		getValue: function(){return world.sumGridValues(world.food); }
 	});
 	this.monitorData.push({
-		label: "num food spawners",
-		getValue: function(){return world.foodSpawners.length;}
-	})
+		label: "total home phermones", 
+		getValue: function(){return world.sumGridValues(world.homePheromones).toFixed(2);}
+	});
+	this.monitorData.push({
+		label: "total food phermones", 
+		getValue: function(){return world.sumGridValues(world.foodPheromones).toFixed(2);}
+	});
 	
 	this.initDomElements(parentElement);
 };

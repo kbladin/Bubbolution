@@ -5,6 +5,8 @@ function Ant (world, x, y, angle) {
 
 	//Brain
 	this.brain = new Brain(this);
+
+	this.hunger = 0;
 	
     // Position and orientation
     this.x = x;
@@ -26,8 +28,10 @@ function Ant (world, x, y, angle) {
 Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest"];
 
 // STATIC CONSTANTS
-Ant.prototype.constants = {
-
+Ant.prototype.STATIC = {
+	HOME_PHERMONE_DECREASE: 0.01,
+	EXIT_PHERMONE_DECREASE: 0.01,
+	FOOD_PHERMONE_DECREASE: 0.01,
 };
 
 Ant.prototype.act = function() {
@@ -87,9 +91,9 @@ Ant.prototype.update = function() {
 	this.world.foodPheromones[this.x][this.y] = Math.max(this.world.foodPheromones[this.x][this.y], this.foodPheromone);
 
 	// Loose pheromones
-	this.homePheromone -= 0.01;
-	this.exitPheromone -= 0.01;
-	this.foodPheromone -= 0.01;
+	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
+	this.exitPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
+	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 };
 
 //

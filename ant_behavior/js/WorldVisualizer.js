@@ -27,17 +27,19 @@ function WorldVisualizer (world, width, height) {
 	function update() {		
 		bmd.clear(0,0,width, height);
 		var antRadius = 5;
+		var dw = width / world.width;
+		var dh = height / world.height;
 
 		// Draw pheromones
 		for (var i = 0; i < world.width; i++) {
 			for (var j = 0; j < world.height; j++) {
-				var xPos = width / world.width * i;
-				var yPos = height / world.height * j;
+				var xPos = dw * i - 0.5 * dw;
+				var yPos = dh * j - 0.5 * dh;
 				if (world.food[i][j] > 0) {
 					// Draw circle
 					bmd.ctx.fillStyle = rgb(0,100,0);
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
@@ -45,7 +47,7 @@ function WorldVisualizer (world, width, height) {
 					// Draw circle
 					bmd.ctx.fillStyle = rgb(100,50,0);
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
@@ -54,7 +56,7 @@ function WorldVisualizer (world, width, height) {
 					var intensity = world.homePheromones[i][j].toFixed(5);
 					bmd.ctx.fillStyle = "rgba(250,250,0," + intensity + ")";
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
@@ -64,7 +66,7 @@ function WorldVisualizer (world, width, height) {
 					var intensity = world.foodPheromones[i][j].toFixed(5);
 					bmd.ctx.fillStyle = "rgba(0,250,255," + intensity + ")";
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
@@ -73,25 +75,15 @@ function WorldVisualizer (world, width, height) {
 					var intensity = world.homePheromones[i][j].toFixed(5);
 					bmd.ctx.fillStyle = "rgba(250,0,0," + intensity + ")";
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
-				/*
-				if (world.buildMaterial[i][j] > 0) {
-					// Draw circle
-					bmd.ctx.fillStyle = rgb(50,50,50);
-					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
-				};
-				*/
 				if (world.entrances[i][j] > 0) {
 					// Draw circle
 					bmd.ctx.fillStyle = rgb(255,0,0);
 					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, 2, 0, Math.PI*2, true); 
+					bmd.ctx.fillRect(xPos, yPos, dw, dh);
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
