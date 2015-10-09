@@ -8,6 +8,7 @@ function World (width, height) {
 	this.numUpdates = 0;
 
 	this.homePheromones = new Array(width);
+	this.exitPheromones = new Array(width);
 	this.foodPheromones = new Array(width);
 
 	this.food = new Array(width);
@@ -17,6 +18,7 @@ function World (width, height) {
 
 	for (var i = 0; i < width; i++) {
 	  this.homePheromones[i] = new Array(height);
+	  this.exitPheromones[i] = new Array(height);
 	  this.foodPheromones[i] = new Array(height);
 
 	  this.food[i] = new Array(height);
@@ -27,6 +29,7 @@ function World (width, height) {
 	for (var i = 0; i < width; i++) {
 		for (var j = 0; j < height; j++) {
 			this.homePheromones[i][j] = 0;
+			this.exitPheromones[i][j] = 0;
 			this.foodPheromones[i][j] = 0;
 			this.food[i][j] = 0;
 			this.nest[i][j] = 0;

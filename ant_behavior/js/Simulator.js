@@ -6,7 +6,7 @@ function Simulator (world) {
 	this.world = world;
 	this.updatesPerWait = 1;
 
-	for (var i = 0; i < 200; i++) {
+	for (var i = 0; i < 100; i++) {
 		var a = new Ant(world, world.width / 2, world.height / 2, 0);
 		world.ants.push(a);
 	}

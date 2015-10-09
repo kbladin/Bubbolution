@@ -14,14 +14,16 @@ function Ant (world, x, y, angle) {
     // Pheromones
     this.foodPheromone = 0;
     this.homePheromone = 1;
+    this.exitPheromone = 0;
 
     // Determines behavior
     this.carryingFood = false;
-    this.carryingBuildMaterial = false;
+    this.carryingDirt = false;
     this.insideNest = false;
+    this.lostInsideNest = false;
 };
 
-Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "digNest"];
+Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest"];
 
 // STATIC CONSTANTS
 Ant.prototype.constants = {
@@ -36,12 +38,7 @@ Ant.prototype.act = function() {
 
 Ant.prototype.update = function() {
 
-	// Check if food is found
-	if (!this.carryingBuildMaterial && !this.carryingFood && this.world.food[this.x][this.y] > 0){
-		this.world.food[this.x][this.y]--;
-		this.carryingFood = true;
-		this.foodPheromone = 1;
-	}
+
 	/*
 	// Check if build material is found
 	if (!this.carryingBuildMaterial && this.world.buildMaterial[this.x][this.y] > 0){
@@ -56,22 +53,43 @@ Ant.prototype.update = function() {
 		this.world.nest[this.x][this.y]++;
 	}
 	*/
-	// Check if home is found
-	if (world.entrances[this.x][this.y]) {
-		this.insideNest = !this.insideNest;
-		this.carryingFood = false;
-		this.carryingBuildMaterial = false;
-		this.homePheromone = 1;
+	if (this.insideNest) {
+		// Check if exit is found and inside
+		if (this.world.entrances[this.x][this.y]) {
+			this.insideNest = false;
+			this.carryingDirt = false;
+			this.homePheromone = 1;
+			this.lostInsideNest = false;
+		}
+		else if (this.exitPheromone <= 0) {
+			this.lostInsideNest = true;
+		}
+	} else {
+		this.exitPheromone = 0;
+		// Check if home is found and outside
+		if (this.world.entrances[this.x][this.y]) {
+			this.insideNest = true;
+			this.carryingFood = false;
+			this.exitPheromone = 1;
+			//this.lostInsideNest = false;
+		}
+		// Check if food is found
+		if (this.world.food[this.x][this.y] > 0){
+			this.world.food[this.x][this.y]--;
+			this.carryingFood = true;
+			this.foodPheromone = 1;
+		}
 	}
 
 	// Spread pheromones
-	world.homePheromones[this.x][this.y] = Math.max(world.homePheromones[this.x][this.y], this.homePheromone);
-	world.foodPheromones[this.x][this.y] = Math.max(world.foodPheromones[this.x][this.y], this.foodPheromone);
+	this.world.homePheromones[this.x][this.y] = Math.max(this.world.homePheromones[this.x][this.y], this.homePheromone);
+	this.world.exitPheromones[this.x][this.y] = Math.max(this.world.exitPheromones[this.x][this.y], this.exitPheromone);
+	this.world.foodPheromones[this.x][this.y] = Math.max(this.world.foodPheromones[this.x][this.y], this.foodPheromone);
 
 	// Loose pheromones
 	this.homePheromone -= 0.01;
+	this.exitPheromone -= 0.01;
 	this.foodPheromone -= 0.01;
-
 };
 
 //
@@ -81,7 +99,9 @@ Ant.prototype.update = function() {
 Ant.prototype.walk = function() {
 	// Sensorposition to check if it can walk forward in a nest
 	var sensorPosition = this.getRelativeSensorPosition().center;
-	if (this.insideNest && this.world.nest[this.x + sensorPosition.x][this.y + sensorPosition.y] ) {
+	if (
+		(this.insideNest && this.world.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
+		!this.insideNest ) {
 		switch(this.angle) {
 		    case 0:
 		        this.x++;
@@ -160,6 +180,7 @@ Ant.prototype.dig = function() {
 		(numReachableSensor == 3 || numReachableSensor == 2) &&
 		(numReachable >2 && numReachable < 6)) {
 		this.world.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
+		this.carryingDirt = true;
 	};
 }
 
@@ -330,6 +351,19 @@ Ant.prototype.lookForHome = function() {
 		this.wander();
 }
 
+Ant.prototype.lookForExit = function() {
+	// Find the way
+	var pheromoneDirectionToExit = this.GetDirectionToHighestPheromone(world.exitPheromones)
+
+	var random = Math.random();
+	if (pheromoneDirectionToExit != -1 && random > 0.1) {
+		this.angle = pheromoneDirectionToExit;
+		this.walk();
+	}
+	else
+		this.wander();
+}
+
 Ant.prototype.lookForFood = function() {
 	// Find the way
 	var pheromoneDirectionToFood = this.GetDirectionToHighestPheromone(world.foodPheromones)
@@ -350,6 +384,5 @@ Ant.prototype.digNest = function() {
 		this.wander();
 		this.dig();
 	}
-
 }
 
