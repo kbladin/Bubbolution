@@ -30,16 +30,19 @@ Simulator.prototype.start = function(simParams) {
 			// Update world
 			for (var i = 0; i < thisSimulator.world.width; i++) {
 				for (var j = 0; j < thisSimulator.world.height; j++) {
-					if (thisSimulator.world.homePheromones[i][j] > 0) {
-						thisSimulator.world.homePheromones[i][j] *= 0.9999;
-						if (thisSimulator.world.homePheromones[i][j] < 0.001)
-							thisSimulator.world.homePheromones[i][j] = 0;
-					}
-					if (thisSimulator.world.foodPheromones[i][j] > 0) {
-						thisSimulator.world.foodPheromones[i][j] *= 0.995;
-						if (thisSimulator.world.foodPheromones[i][j] < 0.001)
-							thisSimulator.world.foodPheromones[i][j] = 0;
-					}
+					for (var k = 0; k < thisSimulator.world.anthills.length; k++) {
+						if (thisSimulator.world.anthills[k].homePheromones[i][j] > 0) {
+							thisSimulator.world.anthills[k].homePheromones[i][j] *= 0.9999;
+							if (thisSimulator.world.anthills[k].homePheromones[i][j] < 0.001)
+								thisSimulator.world.anthills[k].homePheromones[i][j] = 0;
+						}
+						if (thisSimulator.world.anthills[k].foodPheromones[i][j] > 0) {
+							thisSimulator.world.anthills[k].foodPheromones[i][j] *= 0.995;
+							if (thisSimulator.world.anthills[k].foodPheromones[i][j] < 0.001)
+								thisSimulator.world.anthills[k].foodPheromones[i][j] = 0;
+						}	
+					};
+					
 				};				
 			};
 		}

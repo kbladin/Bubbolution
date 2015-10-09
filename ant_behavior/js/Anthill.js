@@ -4,6 +4,8 @@
 
 function Anthill (world, x, y, numAnts) {
 	this.world = world;
+	var w = world.width;
+	var h = world.height;
 	this.capacity = this.STATIC.START_CAPACITY;
 
 	for (var i = 0; i < numAnts; i++) {
@@ -13,7 +15,11 @@ function Anthill (world, x, y, numAnts) {
 	this.food = 0;
 	this.buildMaterial = 0;
 
-	this.nest = Utils.createGrid(world.width, world.height, function (i,j) {
+	this.homePheromones = Utils.createGrid(w, h, 0);
+	this.exitPheromones = Utils.createGrid(w, h, 0);
+	this.foodPheromones = Utils.createGrid(w, h, 0);
+
+	this.nest = Utils.createGrid(w, h, function (i,j) {
 		return Utils.insideRect(i, j, x, y, 6, 6) ? 1 : 0;
 	});
 

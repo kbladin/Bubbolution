@@ -61,34 +61,34 @@ function WorldVisualizer (world, width, height) {
 						bmd.ctx.closePath();
 						bmd.ctx.fill();
 					};
-				};
 
-				// PHEROMONES
-				if (world.homePheromones[i][j] > 0) {
-					var intensity = world.homePheromones[i][j].toFixed(5);
-					bmd.ctx.fillStyle = "rgba(250,250,0," + intensity + ")";
-					bmd.ctx.beginPath();
-					bmd.ctx.fillRect(xPos, yPos, dw, dh);
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
-				};
+					// PHEROMONES
+					if (world.anthills[k].homePheromones[i][j] > 0) {
+						var intensity = world.anthills[k].homePheromones[i][j].toFixed(5);
+						bmd.ctx.fillStyle = "rgba(250,250,0," + intensity + ")";
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
 
-				if (world.foodPheromones[i][j] > 0) {
-					var intensity = world.foodPheromones[i][j].toFixed(5);
-					bmd.ctx.fillStyle = "rgba(0,250,255," + intensity + ")";
-					bmd.ctx.beginPath();
-					bmd.ctx.fillRect(xPos, yPos, dw, dh);
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
-				};
+					if (world.anthills[k].foodPheromones[i][j] > 0) {
+						var intensity = world.anthills[k].foodPheromones[i][j].toFixed(5);
+						bmd.ctx.fillStyle = "rgba(0,250,255," + intensity + ")";
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
 
-				if (world.exitPheromones[i][j] > 0) {
-					var intensity = world.homePheromones[i][j].toFixed(5);
-					bmd.ctx.fillStyle = "rgba(250,0,0," + intensity + ")";
-					bmd.ctx.beginPath();
-					bmd.ctx.fillRect(xPos, yPos, dw, dh);
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
+					if (world.anthills[k].exitPheromones[i][j] > 0) {
+						var intensity = world.anthills[k].homePheromones[i][j].toFixed(5);
+						bmd.ctx.fillStyle = "rgba(250,0,0," + intensity + ")";
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
 				};
 			};			
 		};
@@ -105,8 +105,8 @@ function WorldVisualizer (world, width, height) {
 		for (var i = 0; i < world.ants.length; i++) {
 			var ant = world.ants[i];
 
-			var xPos = width / world.width * ant.x;
-			var yPos = height / world.height * ant.y;
+			var xPos = dw * ant.x;
+			var yPos = dh * ant.y;
 
 			// Draw circle
 			if(ant.carryingFood){

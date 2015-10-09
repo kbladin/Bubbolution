@@ -13,8 +13,8 @@ function World (width, height) {
 	this.ants = [];
 	this.anthills = [];
 
-	this.anthills.push(new Anthill(this, 1*width/4, height/2, 100));
-	this.anthills.push(new Anthill(this, 3*width/4, height/2, 100));
+	this.anthills.push(new Anthill(this, 5, 5, 200));
+	//this.anthills.push(new Anthill(this, 3*width/4, height/2, 200));
 
 };
 
@@ -29,19 +29,13 @@ World.prototype.initGridData = function() {
 	// Create ref to this in current scope for passing to closures
 	var thisWorld = this;
 
-	this.homePheromones = Utils.createGrid(w, h, 0);
-	this.exitPheromones = Utils.createGrid(w, h, 0);
-	this.foodPheromones = Utils.createGrid(w, h, 0);
-
 	this.food = Utils.createGrid(w, h, function (i,j){
-		if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
-			Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-			return 50;
+		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
+		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
+		if(Utils.insideRect(i, j, cx, cy + 50, w, 2)){
+			return 10;
 		}
 		return 0;
-	});
-	this.buildMaterial = Utils.createGrid(w, h, function () {
-		return Math.random() > 0.9 ? 1 : 0;
 	});
 };
 
