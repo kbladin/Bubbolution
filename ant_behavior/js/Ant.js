@@ -1,8 +1,8 @@
 var antCount = 0;
 
-function Ant (world, anthill, x, y, angle) {
+function Ant (world, antColony, x, y, angle) {
 	this.world = world;
-	this.anthill = anthill;
+	this.antColony = antColony;
 
 	//Brain
 	this.brain = new Brain(this);
@@ -45,7 +45,7 @@ Ant.prototype.update = function() {
 
 	if (this.insideNest) {
 		// Check if exit is found and inside
-		if (this.world.entranceToAnthillAt(this.x,this.y) === this.anthill) {
+		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = false;
 			this.carryingDirt = false;
 			this.homePheromone = 1;
@@ -57,10 +57,10 @@ Ant.prototype.update = function() {
 	} else {
 		this.exitPheromone = 0;
 		// Check if home is found and outside
-		if (this.world.entranceToAnthillAt(this.x,this.y) === this.anthill) {
+		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = true;
 			if(this.carryingFood){
-				this.anthill.food++;
+				this.antColony.food++;
 				this.carryingFood = false;
 			}
 			this.exitPheromone = 1;
@@ -75,9 +75,9 @@ Ant.prototype.update = function() {
 	}
 
 	// Spread pheromones
-	this.anthill.homePheromones[this.x][this.y] = Math.max(this.anthill.homePheromones[this.x][this.y], this.homePheromone);
-	this.anthill.exitPheromones[this.x][this.y] = Math.max(this.anthill.exitPheromones[this.x][this.y], this.exitPheromone);
-	this.anthill.foodPheromones[this.x][this.y] = Math.max(this.anthill.foodPheromones[this.x][this.y], this.foodPheromone);
+	this.antColony.homePheromones[this.x][this.y] = Math.max(this.antColony.homePheromones[this.x][this.y], this.homePheromone);
+	this.antColony.exitPheromones[this.x][this.y] = Math.max(this.antColony.exitPheromones[this.x][this.y], this.exitPheromone);
+	this.antColony.foodPheromones[this.x][this.y] = Math.max(this.antColony.foodPheromones[this.x][this.y], this.foodPheromone);
 
 	// Loose pheromones
 	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
@@ -93,7 +93,7 @@ Ant.prototype.walk = function() {
 	// Sensorposition to check if it can walk forward in a nest
 	var sensorPosition = this.getRelativeSensorPosition().center;
 	if (
-		(this.insideNest && this.anthill.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
+		(this.insideNest && this.antColony.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
 		!this.insideNest ) {
 		switch(this.angle) {
 		    case 0:
@@ -162,17 +162,17 @@ Ant.prototype.dig = function() {
 	var numReachableSensor = 0;
 	for (var i = -1; i <= 1; i++) {
 		for (var j = -1; j <= 1; j++) {
-			if (this.anthill.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
+			if (this.antColony.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
 				numReachableSensor++;
 		};
 	};
-	var numReachable = this.getNumReachable(this.anthill.nest);
+	var numReachable = this.getNumReachable(this.antColony.nest);
 
 	//console.log(sensorPosition);
-	if (!this.anthill.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
+	if (!this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
 		(numReachableSensor == 3 || numReachableSensor == 2) &&
 		(numReachable >2 && numReachable < 6)) {
-		this.anthill.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
+		this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
 		this.carryingDirt = true;
 	};
 }
@@ -333,7 +333,7 @@ Ant.prototype.wander = function() {
 
 Ant.prototype.lookForHome = function() {
 	// Find the way
-	var pheromoneDirectionToHome = this.getDirectionToHighestPheromone(this.anthill.homePheromones)
+	var pheromoneDirectionToHome = this.getDirectionToHighestPheromone(this.antColony.homePheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToHome != -1 && random > 0.1) {
@@ -346,7 +346,7 @@ Ant.prototype.lookForHome = function() {
 
 Ant.prototype.lookForExit = function() {
 	// Find the way
-	var pheromoneDirectionToExit = this.getDirectionToHighestPheromone(this.anthill.exitPheromones)
+	var pheromoneDirectionToExit = this.getDirectionToHighestPheromone(this.antColony.exitPheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToExit != -1 && random > 0.1) {
@@ -359,7 +359,7 @@ Ant.prototype.lookForExit = function() {
 
 Ant.prototype.lookForFood = function() {
 	// Find the way
-	var pheromoneDirectionToFood = this.getDirectionToHighestPheromone(this.anthill.foodPheromones)
+	var pheromoneDirectionToFood = this.getDirectionToHighestPheromone(this.antColony.foodPheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToFood != -1 && random > 0.1) {

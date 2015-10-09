@@ -53,8 +53,8 @@ function WorldVisualizer (world, width, height) {
 				};
 
 
-				for (var k = 0; k < world.anthills.length; k++) {
-					if(world.anthills[k].nest[i][j] > 0){
+				for (var k = 0; k < world.antColonies.length; k++) {
+					if(world.antColonies[k].nest[i][j] > 0){
 						bmd.ctx.fillStyle = rgb(150,100,50);
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
@@ -63,8 +63,8 @@ function WorldVisualizer (world, width, height) {
 					};
 
 					// PHEROMONES
-					if (world.anthills[k].homePheromones[i][j] > 0) {
-						var intensity = world.anthills[k].homePheromones[i][j].toFixed(5);
+					if (world.antColonies[k].homePheromones[i][j] > 0) {
+						var intensity = world.antColonies[k].homePheromones[i][j].toFixed(5);
 						bmd.ctx.fillStyle = "rgba(250,250,0," + intensity + ")";
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
@@ -72,8 +72,8 @@ function WorldVisualizer (world, width, height) {
 						bmd.ctx.fill();
 					};
 
-					if (world.anthills[k].foodPheromones[i][j] > 0) {
-						var intensity = world.anthills[k].foodPheromones[i][j].toFixed(5);
+					if (world.antColonies[k].foodPheromones[i][j] > 0) {
+						var intensity = world.antColonies[k].foodPheromones[i][j].toFixed(5);
 						bmd.ctx.fillStyle = "rgba(0,250,255," + intensity + ")";
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
@@ -81,8 +81,8 @@ function WorldVisualizer (world, width, height) {
 						bmd.ctx.fill();
 					};
 
-					if (world.anthills[k].exitPheromones[i][j] > 0) {
-						var intensity = world.anthills[k].homePheromones[i][j].toFixed(5);
+					if (world.antColonies[k].exitPheromones[i][j] > 0) {
+						var intensity = world.antColonies[k].homePheromones[i][j].toFixed(5);
 						bmd.ctx.fillStyle = "rgba(250,0,0," + intensity + ")";
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
@@ -93,8 +93,8 @@ function WorldVisualizer (world, width, height) {
 			};			
 		};
 
-		for (var i = 0; i < world.anthills.length; i++) {
-			var anthill = world.anthills[i]
+		for (var i = 0; i < world.antColonies.length; i++) {
+			var anthill = world.antColonies[i]
 			bmd.ctx.fillStyle = rgb(255,0,0);
 			bmd.ctx.beginPath();
 			bmd.ctx.fillRect(anthill.x*dw, anthill.y*dh, dw, dh);

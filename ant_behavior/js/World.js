@@ -11,10 +11,10 @@ function World (width, height) {
 	this.numUpdates = 0;
 
 	this.ants = [];
-	this.anthills = [];
+	this.antColonies = [];
 
-	this.anthills.push(new Anthill(this, 5, 5, 200));
-	//this.anthills.push(new Anthill(this, 3*width/4, height/2, 200));
+	this.antColonies.push(new AntColony(this, 5, 5, 200));
+	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
 
 };
 
@@ -40,8 +40,8 @@ World.prototype.initGridData = function() {
 };
 
 World.prototype.entranceToAnthillAt = function(x, y) {
-	for(var i = 0; i<this.anthills.length; ++i){
-		var anthill = this.anthills[i];
+	for(var i = 0; i<this.antColonies.length; ++i){
+		var anthill = this.antColonies[i];
 		if(anthill.x === x && anthill.y === y){
 			return anthill;
 		}
