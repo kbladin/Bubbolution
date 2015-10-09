@@ -21,11 +21,19 @@ function StatsMonitor (world, parentElement) {
 	});
 	this.monitorData.push({
 		label: "total home phermones", 
-		getValue: function(){return world.sumGridValues(world.homePheromones).toFixed(2);}
+		getValue: function(){return world.sumGridValues(world.antColonies[0].homePheromones).toFixed(2);}
 	});
 	this.monitorData.push({
 		label: "total food phermones", 
-		getValue: function(){return world.sumGridValues(world.foodPheromones).toFixed(2);}
+		getValue: function(){return world.sumGridValues(world.antColonies[0].foodPheromones).toFixed(2);}
+	});
+	this.monitorData.push({
+		label: "anthill food", 
+		getValue: function(){return world.antColonies[0].food;}
+	});
+	this.monitorData.push({
+		label: "anthill buildMaterial", 
+		getValue: function(){return world.antColonies[0].buildMaterial;}
 	});
 	
 	this.initDomElements(parentElement);

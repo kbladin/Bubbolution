@@ -1,7 +1,8 @@
 var antCount = 0;
 
-function Ant (world, x, y, angle) {
+function Ant (world, antColony, x, y, angle) {
 	this.world = world;
+	this.antColony = antColony;
 
 	//Brain
 	this.brain = new Brain(this);
@@ -13,7 +14,7 @@ function Ant (world, x, y, angle) {
     this.y = y;
     this.angle = angle; // 0-7
 
-    // Pheromones
+ 	// Pheromones
     this.foodPheromone = 0;
     this.homePheromone = 1;
     this.exitPheromone = 0;
@@ -51,24 +52,9 @@ Ant.prototype.act = function() {
 
 Ant.prototype.update = function() {
 
-
-	/*
-	// Check if build material is found
-	if (!this.carryingBuildMaterial && this.world.buildMaterial[this.x][this.y] > 0){
-		this.world.buildMaterial[this.x][this.y]--;
-		this.carryingBuildMaterial = true;
-	}
-	*/
-	/*
-	// Check if nest is found
-	if (this.carryingBuildMaterial && this.getNumReachable(this.world.nest)) {
-		this.carryingBuildMaterial = false;
-		this.world.nest[this.x][this.y]++;
-	}
-	*/
 	if (this.insideNest) {
 		// Check if exit is found and inside
-		if (this.world.entrances[this.x][this.y]) {
+		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = false;
 			this.carryingDirt = false;
 			this.homePheromone = 1;
@@ -81,9 +67,12 @@ Ant.prototype.update = function() {
 	} else {
 		this.exitPheromone = 0;
 		// Check if home is found and outside
-		if (this.world.entrances[this.x][this.y]) {
+		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = true;
-			this.carryingFood = false;
+			if(this.carryingFood){
+				this.antColony.food++;
+				this.carryingFood = false;
+			}
 			this.exitPheromone = 1;
 			this.homeSickTimer = 0;
 			//this.lostInsideNest = false;
@@ -97,9 +86,9 @@ Ant.prototype.update = function() {
 	}
 
 	// Spread pheromones
-	this.world.homePheromones[this.x][this.y] = Math.max(this.world.homePheromones[this.x][this.y], this.homePheromone);
-	this.world.exitPheromones[this.x][this.y] = Math.max(this.world.exitPheromones[this.x][this.y], this.exitPheromone);
-	this.world.foodPheromones[this.x][this.y] = Math.max(this.world.foodPheromones[this.x][this.y], this.foodPheromone);
+	this.antColony.homePheromones[this.x][this.y] = Math.max(this.antColony.homePheromones[this.x][this.y], this.homePheromone);
+	this.antColony.exitPheromones[this.x][this.y] = Math.max(this.antColony.exitPheromones[this.x][this.y], this.exitPheromone);
+	this.antColony.foodPheromones[this.x][this.y] = Math.max(this.antColony.foodPheromones[this.x][this.y], this.foodPheromone);
 
 	// Loose pheromones
 	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
@@ -118,7 +107,7 @@ Ant.prototype.walk = function() {
 	// Sensorposition to check if it can walk forward in a nest
 	var sensorPosition = this.getRelativeSensorPosition().center;
 	if (
-		(this.insideNest && this.world.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
+		(this.insideNest && this.antColony.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
 		!this.insideNest ) {
 		switch(this.angle) {
 		    case 0:
@@ -187,17 +176,17 @@ Ant.prototype.dig = function() {
 	var numReachableSensor = 0;
 	for (var i = -1; i <= 1; i++) {
 		for (var j = -1; j <= 1; j++) {
-			if (this.world.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
+			if (this.antColony.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
 				numReachableSensor++;
 		};
 	};
-	var numReachable = this.getNumReachable(this.world.nest);
+	var numReachable = this.getNumReachable(this.antColony.nest);
 
 	//console.log(sensorPosition);
-	if (!this.world.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
+	if (!this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
 		(numReachableSensor == 3 || numReachableSensor == 2) &&
 		(numReachable >2 && numReachable < 6)) {
-		this.world.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
+		this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
 		this.carryingDirt = true;
 	};
 }
@@ -224,7 +213,7 @@ Ant.prototype.getNumReachable = function(map) {
 	return numReachable;
 }
 
-Ant.prototype.GetDirectionToHighestPheromone = function(pheromoneMap) {
+Ant.prototype.getDirectionToHighestPheromone = function(pheromoneMap) {
 	var pheromoneDirection = -1;
 	var maxPheromoneValue = 0;
 
@@ -358,7 +347,7 @@ Ant.prototype.wander = function() {
 
 Ant.prototype.lookForHome = function() {
 	// Find the way
-	var pheromoneDirectionToHome = this.GetDirectionToHighestPheromone(world.homePheromones)
+	var pheromoneDirectionToHome = this.getDirectionToHighestPheromone(this.antColony.homePheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToHome != -1 && random > 0.1) {
@@ -371,7 +360,7 @@ Ant.prototype.lookForHome = function() {
 
 Ant.prototype.lookForExit = function() {
 	// Find the way
-	var pheromoneDirectionToExit = this.GetDirectionToHighestPheromone(world.exitPheromones)
+	var pheromoneDirectionToExit = this.getDirectionToHighestPheromone(this.antColony.exitPheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToExit != -1 && random > 0.1) {
@@ -384,7 +373,7 @@ Ant.prototype.lookForExit = function() {
 
 Ant.prototype.lookForFood = function() {
 	// Find the way
-	var pheromoneDirectionToFood = this.GetDirectionToHighestPheromone(world.foodPheromones)
+	var pheromoneDirectionToFood = this.getDirectionToHighestPheromone(this.antColony.foodPheromones)
 
 	var random = Math.random();
 	if (pheromoneDirectionToFood != -1 && random > 0.1) {
