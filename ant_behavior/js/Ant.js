@@ -141,14 +141,15 @@ Ant.prototype.walk = function() {
 		    default:
 		        break;
 		}
-		if(this.x < 2)
-			this.x = 2;
-		if(this.x > this.world.width - 2)
-			this.x = this.world.width - 2;
-		if(this.y < 2)
-			this.y = 2;
-		if(this.y > this.world.height - 2)
-			this.y = this.world.height - 2;
+		// The borders are set like this because the ants can sample points on sensors in front of them
+		if(this.x < 3)
+			this.x = 3;
+		if(this.x > this.world.width - 3)
+			this.x = this.world.width - 3;
+		if(this.y < 3)
+			this.y = 3;
+		if(this.y > this.world.height - 3)
+			this.y = this.world.height - 3;
 	}
 	return;
 };
