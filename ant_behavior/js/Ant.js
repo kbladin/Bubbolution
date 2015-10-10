@@ -26,10 +26,6 @@ function Ant (world, antColony, x, y, angle) {
     this.carryingFood = false;
     this.carryingDirt = false;
     this.insideNest = false;
-    /*
-    this.lostInsideNest = false;
-    this.lostOutsideNest = false;
-    */
 };
 
 Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest", "buildAntHill"];
@@ -56,14 +52,9 @@ Ant.prototype.update = function() {
 		// Check if exit is found and inside
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = false;
-			//this.carryingDirt = false;
 			this.homePheromone = 1;
 			this.homeSickTimer = 0;
-			//this.lostInsideNest = false;
-		}/*
-		else if (this.exitPheromone <= 0) {
-			this.lostInsideNest = true;
-		}*/
+		}
 	} else {
 		this.exitPheromone = 0;
 		// Check if home is found and outside
@@ -75,7 +66,6 @@ Ant.prototype.update = function() {
 			}
 			this.exitPheromone = 1;
 			this.homeSickTimer = 0;
-			//this.lostInsideNest = false;
 		}
 		// Check if food is found
 		if (this.world.food[this.x][this.y] > 0){

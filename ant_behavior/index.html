@@ -35,7 +35,14 @@
 		<!-- value = 10 -> 1 update per wait -->
 		<span>Updates per wait:</span>
 		<span id="updatesPerWait" style="width: 200px;"></span>
-		<input type="range" id="slider" value="10">
+		<input type="range" id="slider" value="10"><br>
+
+		<!-- Above or under ground -->
+		<input id="aboveGroundRadio" type="radio" checked="true" name="groundLevel" value="above">Above ground<br>
+		<input id="underGroundRadio" type="radio" name="groundLevel" value="under">Under ground
+
+		<!-- Pheromones -->
+		<input id="drawPheromonesCheckBox" type="checkbox" name="drawPheromones">Show Pheromones<br>
 	</div>
 
 	<script type="text/javascript">

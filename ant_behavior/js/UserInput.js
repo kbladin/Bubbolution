@@ -2,7 +2,8 @@
 // Stats Monitor
 //
 
-function StatsMonitor (world, parentElement) {
+function UserInput (parentElement) {
+	/*
 	this.world = world;
 	this.monitorData = [];
 
@@ -35,52 +36,24 @@ function StatsMonitor (world, parentElement) {
 		label: "anthill buildMaterial", 
 		getValue: function(){return world.antColonies[0].buildMaterial;}
 	});
-	
+	*/
 	this.initDomElements(parentElement);
 };
 
-StatsMonitor.prototype.initDomElements = function(parentElement){
+UserInput.prototype.initDomElements = function(parentElement){
 	// Create Stats container
-	var statsContainer = document.createElement('DIV');
-	statsContainer.style.background = "white";
-	//statsContainer.style.position = "absolute";
-	statsContainer.style.bottom = "0px";
-	parentElement.appendChild(statsContainer);
-
+	var guiContainer = document.createElement('DIV');
+	guiContainer.id = "control";
+	guiContainer.style.background = "white";
+	//guiContainer.style.position = "absolute";
+	guiContainer.style.bottom = "0px";
+	parentElement.appendChild(guiContainer);
+/*
 	//Num agents
 	var thisMonitor = this;
 	this.monitorData.forEach(function(d){
-		statsContainer.appendChild(thisMonitor.createValueMonitor(d.label));	
+		guiContainer.appendChild(thisMonitor.createValueMonitor(d.label));	
 	});
+*/
+	//guiContainer.appendChild();
 }
-
-StatsMonitor.prototype.createValueMonitor = function (label) {
-	var p = document.createElement('P');
-	p.style.margin= "0px";
-
-	var labelSpan = document.createElement('SPAN');
-	labelSpan.textContent = label + ": ";
-
-	var valSpan = document.createElement('SPAN');
-	valSpan.setAttribute("id", label);
-
-	p.appendChild(labelSpan);
-	p.appendChild(valSpan);
-
-	return p;
-}
-
-
-StatsMonitor.prototype.start = function(monitorParams) {
-	var thisMonitor = this;
-	this.loop = setInterval(function() {
-		thisMonitor.monitorData.forEach(function (d) {
-			document.getElementById(d.label).textContent = d.getValue();
-		});
-		
-	}, monitorParams.waitTime);
-};
-
-StatsMonitor.prototype.stop = function() {
-	clearInterval(this.loop)
-};
