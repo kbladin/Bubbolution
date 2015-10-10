@@ -21,7 +21,10 @@ Brain.prototype.getAction = function () {
 		var lostOutsideNest = (this.ant.homeSickTimer >= this.ant.STATIC.MAX_OUTSIDE_HOMESICKNESS);
 		if (this.ant.carryingFood || lostOutsideNest) {
 			bestAction = "lookForHome";
-		} else if (!this.ant.carryingFood) {
+		} else if(this.ant.carryingDirt) {
+			bestAction = "buildAntHill";
+		}
+		else if (!this.ant.carryingFood) {
 			bestAction = "lookForFood";
 		}
 	}

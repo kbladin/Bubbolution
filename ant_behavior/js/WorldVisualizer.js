@@ -38,7 +38,6 @@ function WorldVisualizer (world, width, height) {
 		var dw = width / world.width;
 		var dh = height / world.height;
 
-		// Draw pheromones
 		for (var i = 0; i < world.width; i++) {
 			for (var j = 0; j < world.height; j++) {
 				var xPos = dw * i - 0.5 * dw;
@@ -51,17 +50,22 @@ function WorldVisualizer (world, width, height) {
 					bmd.ctx.closePath();
 					bmd.ctx.fill();
 				};
-
-
 				for (var k = 0; k < world.antColonies.length; k++) {
 					if(world.antColonies[k].nest[i][j] > 0){
+						bmd.ctx.fillStyle = rgb(0,0,0);
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
+					if(world.antColonies[k].antHill[i][j] > 0){
 						bmd.ctx.fillStyle = rgb(150,100,50);
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
 						bmd.ctx.closePath();
 						bmd.ctx.fill();
 					};
-
+/*
 					// PHEROMONES
 					if (world.antColonies[k].homePheromones[i][j] > 0) {
 						var intensity = world.antColonies[k].homePheromones[i][j].toFixed(5);
@@ -89,6 +93,7 @@ function WorldVisualizer (world, width, height) {
 						bmd.ctx.closePath();
 						bmd.ctx.fill();
 					};
+					*/
 				};
 			};			
 		};
