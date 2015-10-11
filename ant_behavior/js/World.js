@@ -13,8 +13,8 @@ function World (width, height) {
 	this.ants = [];
 	this.antColonies = [];
 
-	this.antColonies.push(new AntColony(this, 5, 5, 200));
-	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
+	this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
+	this.antColonies.push(new AntColony(this, 3*width/4, height/2, 20));
 
 };
 
@@ -32,8 +32,11 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-		if(Utils.insideRect(i, j, cx, cy + 50, w, 2)){
-			return 10;
+		if(Utils.insideRect(i, j, cx, cy + 50, 5, 5)){
+			return 100;
+		}
+		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
+			return 100;
 		}
 		return 0;
 	});

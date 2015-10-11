@@ -30,9 +30,9 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", 
 
 // STATIC CONSTANTS
 Ant.prototype.STATIC = {
+	FOOD_PHERMONE_DECREASE: 0.01,
 	HOME_PHERMONE_DECREASE: 0.01,
 	EXIT_PHERMONE_DECREASE: 0.01,
-	FOOD_PHERMONE_DECREASE: 0.01,
 };
 
 Ant.prototype.act = function() {
