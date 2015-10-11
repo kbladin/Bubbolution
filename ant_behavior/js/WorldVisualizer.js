@@ -35,7 +35,7 @@ function WorldVisualizer (world, width, height) {
 		var drawPheromones = document.getElementById('drawPheromonesCheckBox').checked;
 		var drawAnts = document.getElementById('drawAntsCheckBox').checked;
 
-		bmd.ctx.fillStyle = aboveGround ? rgb(219, 184, 77) : rgb(80, 50, 20);
+		bmd.ctx.fillStyle = aboveGround ? rgb(219, 184, 77) : rgb(0,0,0);
 		bmd.ctx.beginPath();
 		bmd.ctx.fillRect(0, 0, width, height);
 		bmd.ctx.closePath();
@@ -72,7 +72,7 @@ function WorldVisualizer (world, width, height) {
 					} 
 					else {
 						if(world.antColonies[k].nest[i][j] > 0){
-							bmd.ctx.fillStyle = rgb(0,0,0);
+							bmd.ctx.fillStyle = rgb(80, 50, 20);
 							bmd.ctx.beginPath();
 							bmd.ctx.fillRect(xPos, yPos, dw, dh);
 							bmd.ctx.closePath();
