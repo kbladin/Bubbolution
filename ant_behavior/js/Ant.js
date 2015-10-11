@@ -166,20 +166,25 @@ Ant.prototype.turnRight = function() {
 
 Ant.prototype.dig = function() {
 	var sensorPosition = this.getRelativeSensorPosition();
+
+	var digPosX = this.x + sensorPosition.center.x;
+	var digPosY = this.y + sensorPosition.center.y;
+
 	var numReachableSensor = 0;
 	for (var i = -1; i <= 1; i++) {
 		for (var j = -1; j <= 1; j++) {
-			if (this.antColony.nest[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
+			if (this.antColony.nest[digPosX + i][digPosY + j])
 				numReachableSensor++;
 		};
 	};
 	var numReachable = this.getNumReachable(this.antColony.nest);
 
 	//console.log(sensorPosition);
-	if (!this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
+
+	if (!this.antColony.nest[digPosX][digPosY] &&
 		(numReachableSensor == 3 || numReachableSensor == 2) &&
-		(numReachable >2 && numReachable < 6)) {
-		this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
+		(numReachable > 2 && numReachable < 5)) {
+		this.antColony.nest[digPosX][digPosY] = 1;
 		this.carryingDirt = true;
 	};
 }
@@ -364,8 +369,9 @@ Ant.prototype.lookForHome = function() {
 		this.angle = pheromoneDirectionToHome;
 		this.walk();
 	}
-	else
+	else{
 		this.wander();
+	}
 }
 
 Ant.prototype.lookForExit = function() {
@@ -377,8 +383,9 @@ Ant.prototype.lookForExit = function() {
 		this.angle = pheromoneDirectionToExit;
 		this.walk();
 	}
-	else
+	else{
 		this.wander();
+	}
 }
 
 Ant.prototype.lookForFood = function() {
@@ -390,13 +397,15 @@ Ant.prototype.lookForFood = function() {
 		this.angle = pheromoneDirectionToFood;
 		this.walk();
 	}
-	else
+	else{
 		this.wander();
+	}
 }
 
 Ant.prototype.digNest = function() {
-	if (!this.insideNest)
+	if (!this.insideNest){
 		this.lookForHome();
+	}
 	else {
 		this.wander();
 		this.dig();
@@ -404,11 +413,13 @@ Ant.prototype.digNest = function() {
 }
 
 Ant.prototype.buildAntHill = function() {
-	if (!this.carryingDirt)
+	if (!this.carryingDirt){
 		this.digNest();
+	}
 	else {
-		if (this.insideNest)
+		if (this.insideNest){
 			this.lookForExit();
+		}
 		else {
 			this.wander();
 			this.placeDirt();
