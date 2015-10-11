@@ -19,20 +19,27 @@ function Ant (world, antColony, x, y, angle) {
     this.homePheromone = 1;
     this.exitPheromone = 0;
 
+    // Timers
+    this.homeSickTimer = 0;
+
     // Determines behavior
     this.carryingFood = false;
     this.carryingDirt = false;
     this.insideNest = false;
-    this.lostInsideNest = false;
 };
 
-Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest"];
+Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", "digNest", "buildAntHill"];
 
 // STATIC CONSTANTS
 Ant.prototype.STATIC = {
 	FOOD_PHERMONE_DECREASE: 0.01,
 	HOME_PHERMONE_DECREASE: 0.01,
 	EXIT_PHERMONE_DECREASE: 0.01,
+
+	FOOD_PHERMONE_DECREASE: 0.01,
+
+	MAX_INSIDE_HOMESICKNESS: 200,
+	MAX_OUTSIDE_HOMESICKNESS: 200,
 };
 
 Ant.prototype.act = function() {
@@ -47,12 +54,8 @@ Ant.prototype.update = function() {
 		// Check if exit is found and inside
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = false;
-			this.carryingDirt = false;
 			this.homePheromone = 1;
-			this.lostInsideNest = false;
-		}
-		else if (this.exitPheromone <= 0) {
-			this.lostInsideNest = true;
+			this.homeSickTimer = 0;
 		}
 	} else {
 		this.exitPheromone = 0;
@@ -64,7 +67,7 @@ Ant.prototype.update = function() {
 				this.carryingFood = false;
 			}
 			this.exitPheromone = 1;
-			//this.lostInsideNest = false;
+			this.homeSickTimer = 0;
 		}
 		// Check if food is found
 		if (this.world.food[this.x][this.y] > 0){
@@ -83,6 +86,9 @@ Ant.prototype.update = function() {
 	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
 	this.exitPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
+
+	// Update timer
+	this.homeSickTimer++;
 };
 
 //
@@ -127,14 +133,15 @@ Ant.prototype.walk = function() {
 		    default:
 		        break;
 		}
-		if(this.x < 2)
-			this.x = 2;
-		if(this.x > this.world.width - 2)
-			this.x = this.world.width - 2;
-		if(this.y < 2)
-			this.y = 2;
-		if(this.y > this.world.height - 2)
-			this.y = this.world.height - 2;
+		// The borders are set like this because the ants can sample points on sensors in front of them
+		if(this.x < 3)
+			this.x = 3;
+		if(this.x > this.world.width - 3)
+			this.x = this.world.width - 3;
+		if(this.y < 3)
+			this.y = 3;
+		if(this.y > this.world.height - 3)
+			this.y = this.world.height - 3;
 	}
 	return;
 };
@@ -174,6 +181,23 @@ Ant.prototype.dig = function() {
 		(numReachable >2 && numReachable < 6)) {
 		this.antColony.nest[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] = 1;
 		this.carryingDirt = true;
+	};
+}
+
+Ant.prototype.placeDirt = function() {
+	// The ant can only place dirt at the rim of the anthill
+	var sensorPosition = this.getRelativeSensorPosition();
+	var numReachableSensor = 0;
+	for (var i = -1; i <= 1; i++) {
+		for (var j = -1; j <= 1; j++) {
+			if (this.antColony.antHill[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
+				numReachableSensor++;
+		};
+	};
+	if (!this.antColony.antHill[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
+		(numReachableSensor >= 3)) {
+		this.antColony.antHill[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] += 1;
+		this.carryingDirt = false;
 	};
 }
 
@@ -376,6 +400,19 @@ Ant.prototype.digNest = function() {
 	else {
 		this.wander();
 		this.dig();
+	}
+}
+
+Ant.prototype.buildAntHill = function() {
+	if (!this.carryingDirt)
+		this.digNest();
+	else {
+		if (this.insideNest)
+			this.lookForExit();
+		else {
+			this.wander();
+			this.placeDirt();
+		}
 	}
 }
 

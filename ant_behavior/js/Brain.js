@@ -11,15 +11,20 @@ Brain.prototype.getAction = function () {
 	// Decision tree
 	var bestAction;
 	if(this.ant.insideNest){
-		if (this.ant.carryingDirt || this.ant.lostInsideNest) {
+		var lostInsideNest = this.ant.homeSickTimer >= this.ant.STATIC.MAX_INSIDE_HOMESICKNESS;
+		if (this.ant.carryingDirt || lostInsideNest) {
 			bestAction = "lookForExit";
 		} else if (!this.ant.carryingDirt) {
 			bestAction = "digNest";
 		}
 	} else 	if(!this.ant.insideNest){
-		if (this.ant.carryingFood) {
+		var lostOutsideNest = (this.ant.homeSickTimer >= this.ant.STATIC.MAX_OUTSIDE_HOMESICKNESS);
+		if (this.ant.carryingFood || lostOutsideNest) {
 			bestAction = "lookForHome";
-		} else if (!this.ant.carryingFood) {
+		} else if(this.ant.carryingDirt) {
+			bestAction = "buildAntHill";
+		}
+		else if (!this.ant.carryingFood) {
 			bestAction = "lookForFood";
 		}
 	}

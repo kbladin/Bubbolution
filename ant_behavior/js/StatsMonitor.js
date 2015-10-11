@@ -2,7 +2,7 @@
 // Stats Monitor
 //
 
-function StatsMonitor (world, parentElement) {
+function StatsMonitor (world, parentElement, leftAdjust) {
 	this.world = world;
 	this.monitorData = [];
 
@@ -36,15 +36,15 @@ function StatsMonitor (world, parentElement) {
 		getValue: function(){return world.antColonies[0].buildMaterial;}
 	});
 	
-	this.initDomElements(parentElement);
+	this.initDomElements(parentElement, leftAdjust);
 };
 
-StatsMonitor.prototype.initDomElements = function(parentElement){
+StatsMonitor.prototype.initDomElements = function(parentElement, leftAdjust){
 	// Create Stats container
 	var statsContainer = document.createElement('DIV');
 	statsContainer.style.background = "white";
 	statsContainer.style.position = "absolute";
-	statsContainer.style.bottom = "0px";
+	statsContainer.style.left = leftAdjust + "px";
 	parentElement.appendChild(statsContainer);
 
 	//Num agents

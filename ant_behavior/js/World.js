@@ -13,8 +13,12 @@ function World (width, height) {
 	this.ants = [];
 	this.antColonies = [];
 
-	this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
-	this.antColonies.push(new AntColony(this, 3*width/4, height/2, 20));
+
+	//this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
+	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 20));
+
+	this.antColonies.push(new AntColony(this, this.width/2, this.height/2, 200));
+	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
 
 };
 

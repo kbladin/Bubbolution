@@ -31,18 +31,34 @@
 </head>
 <body>
 
-	<div id="control">
+	<div id="control" style="cleared: both; background: lightgray;">
 		<!-- value = 10 -> 1 update per wait -->
-		<span>Updates per wait:</span>
-		<span id="updatesPerWait" style="width: 200px;"></span>
+		<div id="simSpeedCtr" style="float: left; width: 150px;">
+			<span>Updates per wait:</span>
+			<span id="updatesPerWait"></span>
+		</div>
 		<input type="range" id="slider" value="10">
+
+		<!-- Above or under ground -->
+		<input id="aboveGroundRadio" type="radio" checked="true" name="groundLevel" value="above">Above ground
+		<input id="underGroundRadio" type="radio" name="groundLevel" value="under">Under ground
+
+		<!-- Pheromones -->
+		<input id="drawPheromonesCheckBox" type="checkbox" name="drawPheromones">Show Pheromones
+		<input id="drawAntsCheckBox" type="checkbox" name="drawAnts" checked >Show Ants
+		<br>
+	</div>
+
+	<div id="statsMonitorDiv" style="float:left;">
+		
 	</div>
 
 	<script type="text/javascript">
 		var world = new World(200, 150);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world, 800, 600);
-		var statsMonitor = new StatsMonitor(world, document.body);
+		var monitorEle = document.getElementById('statsMonitorDiv');
+		var statsMonitor = new StatsMonitor(world, monitorEle, 800);
 
 		statsMonitor.start({waitTime: 1000});
 
