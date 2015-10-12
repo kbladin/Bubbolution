@@ -5,18 +5,24 @@
 function Simulator (world) {
 	this.world = world;
 	this.updatesPerWait = 1;
+	this.skip = 0;
 };
 
 Simulator.prototype.start = function(simParams) {
 	this.updatesPerWait = simParams.updatesPerWait;
+	this.waitTime = simParams.waitTime;
 
 	var slider = document.getElementById('slider');
 	var updatesPerWaitElement = document.getElementById('updatesPerWait');
 
 	var thisSimulator = this;
 	this.loop = setInterval(function() {
+		if(--thisSimulator.skip > 0){
+			return;
+		}
 
 		var sliderVal = +slider.value;
+		thisSimulator.skip = sliderVal < 10 ? Math.min(Math.pow(2,(10-sliderVal)), 50) : 0;
 		thisSimulator.updatesPerWait = Math.ceil(sliderVal*sliderVal * 0.0001 * 50);
 		updatesPerWaitElement.textContent = thisSimulator.updatesPerWait;
 
