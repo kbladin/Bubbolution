@@ -17,7 +17,7 @@ function Ant (world, antColony, x, y, angle) {
 
  	// Pheromones
     this.foodPheromone = 0;
-    this.homePheromone = 1;
+    this.homePheromone = 0;
     this.exitPheromone = 0;
 
     // Timers
@@ -42,7 +42,7 @@ Ant.prototype.STATIC = {
 	MAX_INSIDE_HOMESICKNESS: 200,
 	MAX_OUTSIDE_HOMESICKNESS: 1000,
 
-	MAX_AGE: 15000,
+	MAX_AGE: 150000,
 	MAX_HUNGER: 2000,
 
 	HUNGER_PER_FOOD: 1000,
@@ -71,6 +71,7 @@ Ant.prototype.update = function() {
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = false;
 			this.homePheromone = 1;
+			this.foodPheromone = 0;
 			this.homeSickTimer = 0;
 		}
 	} 
@@ -87,6 +88,7 @@ Ant.prototype.update = function() {
 			}
 			this.exitPheromone = 1;
 			this.homeSickTimer = 0;
+			this.foodPheromone = 0;
 			if(this.antColony.food > 0 && this.hunger > this.STATIC.HUNGER_PER_FOOD){
 				this.hunger -= this.STATIC.HUNGER_PER_FOOD;
 				this.antColony.food--;

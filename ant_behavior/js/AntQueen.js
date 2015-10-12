@@ -5,12 +5,16 @@
 function AntQueen (world, antColony, x, y, angle) {
 	Ant.call(this, world, antColony, x, y, angle);
 	this.insideNest = true;
+
+	this.homePheromone = 0;
+	this.foodPheromone = 0;
+	this.homeSickTimer = 0;
 }
 
 
 AntQueen.prototype.act = function() {
-	if(Math.random() > 0.99){
-		if(this.antColony.food > 100){
+	if(Math.random() > 0.9){
+		if(this.antColony.food > this.world.antsInColony(this.antColony)){
 			this.layEgg();
 			this.wander();
 		}
@@ -30,7 +34,9 @@ AntQueen.prototype.update = function() {
 AntQueen.prototype.layEgg = function() {
 	//Should lay an egg, but simple creates a new ant atm.
 	this.antColony.food -= 10;
-	var a = new Ant(this.world, this.antColony, this.x, this.y, this.angle);
+	var x = this.x;
+	var y = this.y;
+	var a = new Ant(this.world, this.antColony, x, y, this.angle);
 	a.insideNest = true;
 	this.world.ants.push(a);
 };

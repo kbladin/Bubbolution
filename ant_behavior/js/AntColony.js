@@ -2,8 +2,12 @@
 // AntColony
 //
 
-function AntColony (world, x, y, numAnts) {
+function AntColony (world, x, y, food) {
+	console.log("Creating ant colony at x:", x, " y:", y);
 	this.world = world;
+	this.x = x;
+	this.y = y;
+
 	var w = world.width;
 	var h = world.height;
 	this.capacity = this.STATIC.START_CAPACITY;
@@ -11,11 +15,7 @@ function AntColony (world, x, y, numAnts) {
 	var queen = new AntQueen(world, this, x, y, 0);
 	world.ants.push(queen);
 
-	for (var i = 0; i < numAnts; i++) {
-		world.ants.push(new Ant(world, this, x, y, 0));
-	}
-
-	this.food = 0;
+	this.food = food;
 	this.buildMaterial = 0;
 
 	this.homePheromones = Utils.createGrid(w, h, 0);
@@ -28,9 +28,6 @@ function AntColony (world, x, y, numAnts) {
 	this.antHill = Utils.createGrid(w, h, function (i,j) {
 		return Utils.insideRect(i, j, x, y, 1, 3) ? 1 : 0;
 	});
-
-	this.x = x;
-	this.y = y;
 };
 
 AntColony.prototype.STATIC = {

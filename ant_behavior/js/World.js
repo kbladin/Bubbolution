@@ -17,7 +17,7 @@ function World (width, height) {
 	//this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
 	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 20));
 
-	this.antColonies.push(new AntColony(this, this.width/2, this.height/2, 5));
+	this.antColonies.push(new AntColony(this, width/2, height/2, 150));
 	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
 
 };
@@ -36,7 +36,7 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-		if(Utils.insideRect(i, j, cx, cy + 50, 5, 5)){
+		if(Utils.insideRect(i, j, cx, cy + 20, 15, 15)){
 			return 100;
 		}
 		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
@@ -46,10 +46,10 @@ World.prototype.initGridData = function() {
 			return 100;
 		}
 		if(Utils.insideRect(i, j, w-10, 10, 5, 5)){
-			return 100;
+			return 1000;
 		}
 		if(Math.random() > 0.99){
-			return 100;
+			return 0;
 		}
 		return 0;
 	});
@@ -87,5 +87,15 @@ World.prototype.removeAnt = function(ant) {
 			return this.ants.splice(i, 1);
 		}
 	};
+};
+
+World.prototype.antsInColony = function(colony) {
+	var sum = 0;
+	for (var i = 0; i < this.ants.length; i++) {
+		if(this.ants[i].antColony === colony){
+			sum++;
+		}
+	};
+	return sum;
 };
 
