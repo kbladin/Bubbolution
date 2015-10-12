@@ -8,6 +8,9 @@ function AntColony (world, x, y, numAnts) {
 	var h = world.height;
 	this.capacity = this.STATIC.START_CAPACITY;
 
+	var queen = new AntQueen(world, this, x, y, 0);
+	world.ants.push(queen);
+
 	for (var i = 0; i < numAnts; i++) {
 		world.ants.push(new Ant(world, this, x, y, 0));
 	}

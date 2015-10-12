@@ -8,6 +8,7 @@ function Ant (world, antColony, x, y, angle) {
 	this.brain = new Brain(this);
 
 	this.hunger = 0;
+	this.age = 0;
 	
     // Position and orientation
     this.x = x;
@@ -39,7 +40,12 @@ Ant.prototype.STATIC = {
 	FOOD_PHERMONE_DECREASE: 0.01,
 
 	MAX_INSIDE_HOMESICKNESS: 200,
-	MAX_OUTSIDE_HOMESICKNESS: 200,
+	MAX_OUTSIDE_HOMESICKNESS: 1000,
+
+	MAX_AGE: 15000,
+	MAX_HUNGER: 2000,
+
+	HUNGER_PER_FOOD: 1000,
 };
 
 Ant.prototype.act = function() {
@@ -50,6 +56,16 @@ Ant.prototype.act = function() {
 
 Ant.prototype.update = function() {
 
+	// Update hunger and age
+	this.hunger++;
+	this.age++;
+
+	if(this.age > this.STATIC.MAX_AGE || this.hunger > this.STATIC.MAX_HUNGER){
+		if(Math.random() > 0.999){
+			return this.world.removeAnt(this);
+		}
+	}
+
 	if (this.insideNest) {
 		// Check if exit is found and inside
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
@@ -57,7 +73,10 @@ Ant.prototype.update = function() {
 			this.homePheromone = 1;
 			this.homeSickTimer = 0;
 		}
-	} else {
+	} 
+	else {
+		//Outside nest
+
 		this.exitPheromone = 0;
 		// Check if home is found and outside
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
@@ -68,6 +87,10 @@ Ant.prototype.update = function() {
 			}
 			this.exitPheromone = 1;
 			this.homeSickTimer = 0;
+			if(this.antColony.food > 0 && this.hunger > this.STATIC.HUNGER_PER_FOOD){
+				this.hunger -= this.STATIC.HUNGER_PER_FOOD;
+				this.antColony.food--;
+			}
 		}
 		// Check if food is found
 		if (this.world.food[this.x][this.y] > 0){

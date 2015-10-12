@@ -42,6 +42,9 @@ World.prototype.initGridData = function() {
 		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
 			return 100;
 		}
+		if(Utils.insideRect(i, j, 35, 35, 5, 5)){
+			return 100;
+		}
 		return 0;
 	});
 };
@@ -70,5 +73,13 @@ World.prototype.sumGridValues = function(grid) {
 		sum += val;
 	});
 	return sum;
+};
+
+World.prototype.removeAnt = function(ant) {
+	for (var i = 0; i < this.ants.length; i++) {
+		if(this.ants[i] === ant){
+			return this.ants.splice(i, 1);
+		}
+	};
 };
 

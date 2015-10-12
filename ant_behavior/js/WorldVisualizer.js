@@ -41,8 +41,6 @@ function WorldVisualizer (world, width, height) {
 		bmd.ctx.closePath();
 		bmd.ctx.fill();
 
-		var antRadius = 3;
-
 		var dw = width / world.width;
 		var dh = height / world.height;
 
@@ -130,6 +128,8 @@ function WorldVisualizer (world, width, height) {
 		if (drawAnts){
 			for (var i = 0; i < world.ants.length; i++) {
 				var ant = world.ants[i];
+
+				var antRadius = (ant instanceof AntQueen) ? 6 : 3;
 
 				var xPos = dw * ant.x;
 				var yPos = dh * ant.y;

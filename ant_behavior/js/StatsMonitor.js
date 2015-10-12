@@ -35,6 +35,24 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 		label: "anthill buildMaterial", 
 		getValue: function(){return world.antColonies[0].buildMaterial;}
 	});
+	this.monitorData.push({
+		label: "ants[0].age", 
+		getValue: function(){
+			if (world.ants[0]){
+				return world.ants[0].age;
+			}
+			return '?';
+		}
+	});
+	this.monitorData.push({
+		label: "ants[0].hunger", 
+		getValue: function(){
+			if (world.ants[0]){
+				return world.ants[0].hunger;
+			}
+			return '?';
+		}
+	});
 	
 	this.initDomElements(parentElement, leftAdjust);
 };

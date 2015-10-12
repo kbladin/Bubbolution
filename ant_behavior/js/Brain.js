@@ -19,7 +19,8 @@ Brain.prototype.getAction = function () {
 		}
 	} else 	if(!this.ant.insideNest){
 		var lostOutsideNest = (this.ant.homeSickTimer >= this.ant.STATIC.MAX_OUTSIDE_HOMESICKNESS);
-		if (this.ant.carryingFood || lostOutsideNest) {
+		var needFood = this.ant.hunger > 0.8 * this.ant.STATIC.MAX_HUNGER;
+		if (this.ant.carryingFood || lostOutsideNest || needFood) {
 			bestAction = "lookForHome";
 		} else if(this.ant.carryingDirt) {
 			bestAction = "buildAntHill";
