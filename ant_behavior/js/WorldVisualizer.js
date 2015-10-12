@@ -119,7 +119,7 @@ function WorldVisualizer (world, width, height) {
 			var anthill = world.antColonies[i]
 			bmd.ctx.fillStyle = rgb(255,0,0);
 			bmd.ctx.beginPath();
-			bmd.ctx.fillRect(anthill.x*dw, anthill.y*dh, dw, dh);
+			bmd.ctx.fillRect((anthill.x-0.5)*dw, (anthill.y-0.5)*dh, dw, dh);
 			bmd.ctx.closePath();
 			bmd.ctx.fill();
 		};

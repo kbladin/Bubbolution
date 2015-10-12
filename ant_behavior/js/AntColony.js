@@ -26,7 +26,7 @@ function AntColony (world, x, y, numAnts) {
 		return Utils.insideRect(i, j, x, y, 1, 3) ? 1 : 0;
 	});
 	this.antHill = Utils.createGrid(w, h, function (i,j) {
-		return Utils.insideRect(i, j, x, y, 6, 6) ? 1 : 0;
+		return Utils.insideRect(i, j, x, y, 1, 3) ? 1 : 0;
 	});
 
 	this.x = x;
