@@ -62,6 +62,7 @@ AntQueen.prototype.update = function() {
 //
 
 AntQueen.prototype.layEgg = function() {
+	/*
 	//Should lay an egg, but simple creates a new ant atm.
 	this.antColony.food -= this.STATIC.LAY_EGG_COST;
 	var x = this.x;
@@ -69,6 +70,13 @@ AntQueen.prototype.layEgg = function() {
 	var a = new Ant(this.world, this.antColony, x, y, this.angle);
 	a.insideNest = true;
 	this.world.ants.push(a);
+	*/
+	var x = this.x;
+	var y = this.y;
+	var e = new Egg(this.world, this.antColony, x, y, this.angle);
+	e.insideNest = true;
+	this.antColony.eggs.push(e);
+	this.antColony.food -= this.STATIC.LAY_EGG_COST;
 };
 
 //
@@ -77,7 +85,7 @@ AntQueen.prototype.layEgg = function() {
 
 AntQueen.prototype.layEggs = function() {
 	this.wander();
-	if(Math.random() > 0.0){
+	if(Math.random() < 1.0){
 		if(this.antColony.food > this.STATIC.LAY_EGG_COST &&
 			this.antColony.exitPheromones[this.x][this.y]){
 			// Only lay an egg where there are exit pheromones

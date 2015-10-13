@@ -15,6 +15,7 @@
 	<!-- Evolution stuff -->
 	<script type="text/javascript" src="js/Ant.js"></script>
 	<script type="text/javascript" src="js/AntQueen.js"></script>
+	<script type="text/javascript" src="js/Egg.js"></script>
 	<script type="text/javascript" src="js/AntColony.js"></script>
 	<script type="text/javascript" src="js/Enemy.js"></script>
 	<script type="text/javascript" src="js/MoveLogic.js"></script>
@@ -39,7 +40,7 @@
 	<div id="control" style="cleared: both; background: lightgray;">
 		<!-- value = 10 -> 1 update per wait -->
 		<div id="simSpeedCtr" style="float: left; width: 150px;">
-			<span>Updates per wait:</span>
+			<span>Simulation speed:</span>
 			<span id="updatesPerWait"></span>
 		</div>
 		<input type="range" id="slider" value="10">
@@ -50,7 +51,10 @@
 
 		<!-- Pheromones -->
 		<input id="drawPheromonesCheckBox" type="checkbox" name="drawPheromones">Show Pheromones
-		<input id="drawAntsCheckBox" type="checkbox" name="drawAnts" checked >Show Ants
+
+		<!-- Ants -->
+		<input id="drawAntsCheckBox" type="checkbox" name="drawAnts" checked >Show ants
+		<input id="drawDetailedCheckBox" type="checkbox" name="drawDetailed" checked >Detailed graphics
 		<br>
 	</div>
 
@@ -59,7 +63,7 @@
 	</div>
 
 	<script type="text/javascript">
-		var world = new World(200, 150);
+		var world = new World(80, 60);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world, 800, 600);
 		var monitorEle = document.getElementById('statsMonitorDiv');

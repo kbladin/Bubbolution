@@ -6,6 +6,19 @@ function WorldVisualizer (world, width, height) {
 	var game = new Phaser.Game(width, height, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 	var bmd;
 	var bitmapSprite;
+
+	var groundColor = rgb(219, 184, 77);
+	var underGroundColor = rgb(20,10,0);
+	var foodColor = rgb(0,255,100);
+	var dirtColor = rgb(150,100,50);
+	var nestColor = rgb(200,150,75);
+
+	var antColor = {
+		head : '#550000',
+		center : '#FF9900',
+		butt : '#772222',
+		legs : '#222222'
+	};
 	
 	function preload() {
 		
@@ -34,8 +47,9 @@ function WorldVisualizer (world, width, height) {
 		var aboveGround = document.getElementById('aboveGroundRadio').checked;
 		var drawPheromones = document.getElementById('drawPheromonesCheckBox').checked;
 		var drawAnts = document.getElementById('drawAntsCheckBox').checked;
+		var detailedGraphics = document.getElementById('drawDetailedCheckBox').checked;
 
-		bmd.ctx.fillStyle = aboveGround ? rgb(219, 184, 77) : rgb(0,0,0);
+		bmd.ctx.fillStyle = aboveGround ? groundColor : underGroundColor;
 		bmd.ctx.beginPath();
 		bmd.ctx.fillRect(0, 0, width, height);
 		bmd.ctx.closePath();
@@ -51,7 +65,7 @@ function WorldVisualizer (world, width, height) {
 
 				if (aboveGround) {
 					if (world.food[i][j] > 0) {
-						bmd.ctx.fillStyle = rgb(0,150,0);
+						bmd.ctx.fillStyle = foodColor;
 						bmd.ctx.beginPath();
 						bmd.ctx.fillRect(xPos, yPos, dw, dh);
 						bmd.ctx.closePath();
@@ -61,7 +75,7 @@ function WorldVisualizer (world, width, height) {
 				for (var k = 0; k < world.antColonies.length; k++) {
 					if (aboveGround) {
 						if(world.antColonies[k].antHill[i][j] > 0){
-							bmd.ctx.fillStyle = rgb(150,100,50);
+							bmd.ctx.fillStyle = dirtColor;
 							bmd.ctx.beginPath();
 							bmd.ctx.fillRect(xPos, yPos, dw, dh);
 							bmd.ctx.closePath();
@@ -70,7 +84,7 @@ function WorldVisualizer (world, width, height) {
 					} 
 					else {
 						if(world.antColonies[k].nest[i][j] > 0){
-							bmd.ctx.fillStyle = rgb(80, 50, 20);
+							bmd.ctx.fillStyle = nestColor;
 							bmd.ctx.beginPath();
 							bmd.ctx.fillRect(xPos, yPos, dw, dh);
 							bmd.ctx.closePath();
@@ -102,7 +116,7 @@ function WorldVisualizer (world, width, height) {
 						}
 						else{
 							if (world.antColonies[k].exitPheromones[i][j] > 0) {
-								var intensity = world.antColonies[k].homePheromones[i][j].toFixed(5);
+								var intensity = world.antColonies[k].exitPheromones[i][j].toFixed(5);
 								bmd.ctx.fillStyle = "rgba(250,0,0," + intensity + ")";
 								bmd.ctx.beginPath();
 								bmd.ctx.fillRect(xPos, yPos, dw, dh);
@@ -116,12 +130,29 @@ function WorldVisualizer (world, width, height) {
 		};
 
 		for (var i = 0; i < world.antColonies.length; i++) {
-			var anthill = world.antColonies[i]
+			// Entrances
+			var entrance = world.antColonies[i]
 			bmd.ctx.fillStyle = rgb(255,0,0);
 			bmd.ctx.beginPath();
-			bmd.ctx.fillRect((anthill.x-0.5)*dw, (anthill.y-0.5)*dh, dw, dh);
+			bmd.ctx.fillRect((entrance.x-0.5)*dw, (entrance.y-0.5)*dh, dw, dh);
 			bmd.ctx.closePath();
 			bmd.ctx.fill();
+
+			// Draw eggs
+			for (var j = 0; j < world.antColonies[i].eggs.length; j++) {
+				egg = world.antColonies[i].eggs[j];
+				var xPos = dw * egg.x;
+				var yPos = dh * egg.y;
+				var eggRadius = width / world.width * 0.7;
+				if (aboveGround == !egg.insideNest) {
+					// Center piece
+					bmd.ctx.fillStyle = '#FFFFFF';
+					bmd.ctx.beginPath();
+					bmd.ctx.arc(xPos, yPos, eggRadius, 0, Math.PI*2, true); 
+					bmd.ctx.closePath();
+					bmd.ctx.fill();
+				}
+			};
 		};
 
 		// Draw ants
@@ -129,39 +160,105 @@ function WorldVisualizer (world, width, height) {
 			for (var i = 0; i < world.ants.length; i++) {
 				var ant = world.ants[i];
 
-				var antRadius = (ant instanceof AntQueen) ? 6 : 3;
+				var antRadius = (ant instanceof AntQueen) ? 1.3 : 0.7;
+				antRadius *= width / world.width;
 
 				var xPos = dw * ant.x;
 				var yPos = dh * ant.y;
 
 				if (aboveGround == !ant.insideNest) {
-					// Draw circle
-					if(ant.carryingFood)
-						bmd.ctx.fillStyle = '#FF9900';
-					else if(ant.carryingDirt)
-						bmd.ctx.fillStyle = '#999999';
-					else if(ant.insideNest && ant.lostInsideNest())
-						bmd.ctx.fillStyle = '#FF00FF';
-					else if(!ant.insideNest && ant.lostOutsideNest())
-						bmd.ctx.fillStyle = '#6600FF';
-					else
-						bmd.ctx.fillStyle = '#FFFFFF';
-					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, antRadius, 0, Math.PI*2, true); 
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
+					var directionVector = {
+						x: Math.cos(ant.angle / 8 * 2*Math.PI),
+						y: Math.sin(ant.angle / 8 * 2*Math.PI)
+					};
+					if (detailedGraphics){
+						bmd.ctx.strokeStyle = antColor.legs;
+							
+						rSqrt2 = antRadius*1.2 / (Math.sqrt(2));
 
-					// Draw direction indicator
-					if(ant.insideNest)
-						bmd.ctx.strokeStyle = '#000000';
-					else
-						bmd.ctx.strokeStyle = '#9999FF';
+						bmd.ctx.lineWidth = antRadius * 0.2;
+						bmd.ctx.beginPath();
+						bmd.ctx.moveTo(xPos - rSqrt2, yPos - rSqrt2);
+						bmd.ctx.lineTo(xPos + rSqrt2, yPos + rSqrt2);
+						bmd.ctx.stroke();
 
-					bmd.ctx.lineWidth = 5;
-					bmd.ctx.beginPath();
-					bmd.ctx.moveTo(xPos, yPos);
-					bmd.ctx.lineTo(xPos + Math.cos(ant.angle / 7 * 2*Math.PI) * antRadius, yPos + Math.sin(ant.angle / 7 * 2*Math.PI) * antRadius);
-					bmd.ctx.stroke();
+						bmd.ctx.lineWidth = antRadius * 0.2;
+						bmd.ctx.beginPath();
+						bmd.ctx.moveTo(xPos, yPos - antRadius * 1.2);
+						bmd.ctx.lineTo(xPos, yPos + antRadius * 1.2);
+						bmd.ctx.stroke();
+
+						bmd.ctx.lineWidth = antRadius * 0.2;
+						bmd.ctx.beginPath();
+						bmd.ctx.moveTo(xPos - antRadius * 1.2, yPos);
+						bmd.ctx.lineTo(xPos + antRadius * 1.2, yPos);
+						bmd.ctx.stroke();
+
+						bmd.ctx.lineWidth = antRadius * 0.2;
+						bmd.ctx.beginPath();
+						bmd.ctx.moveTo(xPos + rSqrt2, yPos - rSqrt2);
+						bmd.ctx.lineTo(xPos - rSqrt2, yPos + rSqrt2);
+						bmd.ctx.stroke();
+
+
+						if(ant.carryingFood){
+							bmd.ctx.strokeStyle = foodColor;
+
+							bmd.ctx.lineWidth = antRadius;
+							bmd.ctx.beginPath();
+							bmd.ctx.moveTo(xPos, yPos);
+							bmd.ctx.lineTo(xPos + directionVector.x * antRadius * 2.5, yPos + directionVector.y * antRadius * 2.5);
+							bmd.ctx.stroke();
+						}
+						if(ant.carryingDirt){
+							bmd.ctx.strokeStyle = dirtColor;
+
+							bmd.ctx.lineWidth = antRadius;
+							bmd.ctx.beginPath();
+							bmd.ctx.moveTo(xPos, yPos);
+							bmd.ctx.lineTo(xPos + directionVector.x * antRadius * 2.5, yPos + directionVector.y * antRadius * 2.5);
+							bmd.ctx.stroke();
+						}
+
+						// Center piece
+						bmd.ctx.fillStyle = antColor.center;
+						bmd.ctx.beginPath();
+						bmd.ctx.arc(xPos, yPos, antRadius * 0.4, 0, Math.PI*2, true); 
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+						// Back piece
+						bmd.ctx.fillStyle = antColor.butt;
+						bmd.ctx.beginPath();
+						bmd.ctx.arc(xPos - directionVector.x*antRadius, yPos - directionVector.y*antRadius, antRadius * 0.7, 0, Math.PI*2, true); 
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+						// Head piece
+						bmd.ctx.fillStyle = antColor.head;
+						bmd.ctx.beginPath();
+						bmd.ctx.arc(xPos + directionVector.x*antRadius * 0.6, yPos + directionVector.y*antRadius*0.6, antRadius * 0.6, 0, Math.PI*2, true); 
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					} else {
+						// Center piece
+						bmd.ctx.fillStyle = antColor.head;
+						bmd.ctx.beginPath();
+						bmd.ctx.arc(xPos, yPos, antRadius, 0, Math.PI*2, true); 
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+
+						if (ant.carryingFood)
+							bmd.ctx.strokeStyle = foodColor;
+						else if(ant.carryingDirt)
+							bmd.ctx.strokeStyle = dirtColor;
+						else
+							bmd.ctx.strokeStyle = antColor.center;
+
+						bmd.ctx.lineWidth = antRadius;
+						bmd.ctx.beginPath();
+						bmd.ctx.moveTo(xPos, yPos);
+						bmd.ctx.lineTo(xPos + directionVector.x * antRadius, yPos + directionVector.y * antRadius);
+						bmd.ctx.stroke();
+					}
 				}
 			}
 		}

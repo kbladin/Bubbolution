@@ -14,6 +14,7 @@ function AntColony (world, x, y, food) {
 
 	var queen = new AntQueen(world, this, x, y, 0);
 	world.ants.push(queen);
+	this.eggs = [];
 
 	this.food = food;
 	this.buildMaterial = 0;
@@ -36,4 +37,12 @@ AntColony.prototype.STATIC = {
 
 AntColony.prototype.isEntrance = function(x, y) {
 	return this.x === x && this.y === y;
+};
+
+AntColony.prototype.removeEgg = function(egg) {
+	for (var i = 0; i < this.eggs.length; i++) {
+		if(this.eggs[i] === egg){
+			return this.eggs.splice(i, 1);
+		}
+	};
 };
