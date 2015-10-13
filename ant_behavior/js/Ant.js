@@ -21,7 +21,7 @@ function Ant (world, antColony, x, y, angle) {
     this.exitPheromone = 0;
 
     // Timers
-    this.homeSickTimer = 0;
+    //this.homeSickTimer = 0;
 
     // Determines behavior
     this.carryingFood = false;
@@ -33,9 +33,9 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", 
 
 // STATIC CONSTANTS
 Ant.prototype.STATIC = {
-	FOOD_PHERMONE_DECREASE: 0.01,
-	HOME_PHERMONE_DECREASE: 0.01,
-	EXIT_PHERMONE_DECREASE: 0.01,
+	FOOD_PHERMONE_DECREASE: 0.005,
+	HOME_PHERMONE_DECREASE: 0.005,
+	EXIT_PHERMONE_DECREASE: 0.03,
 
 	FOOD_PHERMONE_DECREASE: 0.01,
 
@@ -74,7 +74,7 @@ Ant.prototype.update = function() {
 			this.exitPheromone = 0;
 			this.foodPheromone = 0;
 			
-			this.homeSickTimer = 0;
+			//this.homeSickTimer = 0;
 		}
 	} 
 	else {
@@ -92,7 +92,7 @@ Ant.prototype.update = function() {
 			this.foodPheromone = 0;
 			this.homePheromone = 0;
 
-			this.homeSickTimer = 0;
+			//this.homeSickTimer = 0;
 			if(this.antColony.food > 0 && this.hunger > this.STATIC.HUNGER_PER_FOOD){
 				this.hunger -= this.STATIC.HUNGER_PER_FOOD;
 				this.antColony.food--;
@@ -117,7 +117,7 @@ Ant.prototype.update = function() {
 	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 
 	// Update timer
-	this.homeSickTimer++;
+	//this.homeSickTimer++;
 };
 
 //
@@ -373,6 +373,13 @@ Ant.prototype.getRelativeSensorPosition = function() {
 	return sensorPoints;
 }
 
+Ant.prototype.lostInsideNest = function(){
+	return this.insideNest && (this.antColony.exitPheromones[this.x][this.y] === 0 || this.exitPheromone <= 0);
+}
+
+Ant.prototype.lostOutsideNest = function(){
+	return !this.insideNest && (!this.antColony.homePheromones[this.x][this.y] === 0 || this.homePheromone <= 0);
+}
 
 //
 // HIGH LEVEL ACTIONS

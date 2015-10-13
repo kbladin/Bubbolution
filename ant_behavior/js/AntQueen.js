@@ -11,7 +11,7 @@ function AntQueen (world, antColony, x, y, angle) {
 
 	this.homePheromone = 0;
 	this.foodPheromone = 0;
-	this.homeSickTimer = 0;
+	//this.homeSickTimer = 0;
 }
 
 
@@ -32,7 +32,7 @@ AntQueen.prototype.update = function() {
 		// Check if exit is found and inside, do not go out
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.exitPheromone = 1;
-			this.homeSickTimer = 0;
+			//this.homeSickTimer = 0;
 		}
 	} 
 	else {
@@ -42,7 +42,7 @@ AntQueen.prototype.update = function() {
 		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
 			this.insideNest = true;
 			this.exitPheromone = 1;
-			this.homeSickTimer = 0;
+			//this.homeSickTimer = 0;
 		}
 	}
 
@@ -57,7 +57,7 @@ AntQueen.prototype.update = function() {
 	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 
 	// Update timer
-	this.homeSickTimer++;
+	//this.homeSickTimer++;
 };
 
 //

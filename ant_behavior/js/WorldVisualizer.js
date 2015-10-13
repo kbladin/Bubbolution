@@ -140,9 +140,9 @@ function WorldVisualizer (world, width, height) {
 						bmd.ctx.fillStyle = '#FF9900';
 					else if(ant.carryingDirt)
 						bmd.ctx.fillStyle = '#999999';
-					else if(ant.insideNest && ant.homeSickTimer >= ant.STATIC.MAX_INSIDE_HOMESICKNESS) // Lost inside nest
+					else if(ant.insideNest && ant.lostInsideNest())// ant.homeSickTimer >= ant.STATIC.MAX_INSIDE_HOMESICKNESS) // Lost inside nest
 						bmd.ctx.fillStyle = '#FF00FF';
-					else if(!ant.insideNest && ant.homeSickTimer >= ant.STATIC.MAX_OUTSIDE_HOMESICKNESS) // Lost outside nest
+					else if(!ant.insideNest && ant.lostOutsideNest())// ant.homeSickTimer >= ant.STATIC.MAX_OUTSIDE_HOMESICKNESS) // Lost outside nest
 						bmd.ctx.fillStyle = '#6600FF';
 					else
 						bmd.ctx.fillStyle = '#FFFFFF';
