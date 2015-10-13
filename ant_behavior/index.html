@@ -14,6 +14,7 @@
 	<!-- Evolution stuff -->
 	<script type="text/javascript" src="js/Ant.js"></script>
 	<script type="text/javascript" src="js/AntQueen.js"></script>
+	<script type="text/javascript" src="js/Egg.js"></script>
 	<script type="text/javascript" src="js/AntColony.js"></script>
 	<script type="text/javascript" src="js/Enemy.js"></script>
 	<script type="text/javascript" src="js/MoveLogic.js"></script>
@@ -61,7 +62,7 @@
 	</div>
 
 	<script type="text/javascript">
-		var world = new World(200, 150);
+		var world = new World(80, 60);
 		var simulator = new Simulator(world);
 		var visualizer = new WorldVisualizer(world, 800, 600);
 		var monitorEle = document.getElementById('statsMonitorDiv');

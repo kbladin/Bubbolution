@@ -100,7 +100,7 @@ Ant.prototype.update = function() {
 			this.world.food[this.x][this.y]--;
 			this.carryingFood = true;
 			this.foodPheromone = Math.min(this.world.food[this.x][this.y], 1);
-			this.homePheromone = 0;
+			//this.homePheromone = 0;
 		}
 	}
 

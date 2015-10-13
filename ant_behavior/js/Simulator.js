@@ -32,6 +32,12 @@ Simulator.prototype.start = function(simParams) {
 			for (var i = 0; i < thisSimulator.world.ants.length; ++i) {
 				thisSimulator.world.ants[i].act();
 			};
+			//Update eggs
+			for (var i = 0; i < thisSimulator.world.antColonies.length; ++i) {
+				for (var j = 0; j < thisSimulator.world.antColonies[i].eggs.length; ++j) {
+					thisSimulator.world.antColonies[i].eggs[j].update();
+				};
+			};
 			
 			//Update enemies
 			for (var i = 0; i < thisSimulator.world.enemies.length; ++i) {
