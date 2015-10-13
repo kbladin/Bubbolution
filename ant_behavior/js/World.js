@@ -36,20 +36,21 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
+
 		if(Utils.insideRect(i, j, cx, cy + 20, 15, 15)){
-			return 100;
+			return 10;
 		}
 		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
-			return 100;
+			return 10;
 		}
-		if(Utils.insideRect(i, j, 35, 35, 5, 5)){
-			return 100;
+		if(Utils.insideRect(i, j, 35, 35, 50, 50)){
+			return 10;
 		}
 		if(Utils.insideRect(i, j, w-10, 10, 5, 5)){
-			return 1000;
-		}
-		if(Math.random() > 0.99){
 			return 0;
+		}
+		if(Math.random() > 0.999){
+			return 1;
 		}
 		return 0;
 	});

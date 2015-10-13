@@ -20,7 +20,7 @@ Brain.prototype.getAction = function () {
 	} else 	if(!this.ant.insideNest){
 		var lostOutsideNest = this.ant.lostOutsideNest();
 		var needFood = this.ant.hunger > 0.8 * this.ant.STATIC.MAX_HUNGER;
-		if (this.ant.carryingFood || lostOutsideNest || needFood) {
+		if (this.ant.carryingFood || lostOutsideNest || (needFood && this.ant.antColony.food > 0)) {
 			bestAction = "lookForHome";
 		} else if(this.ant.carryingDirt) {
 			bestAction = "buildAntHill";
