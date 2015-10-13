@@ -1,2 +1,3 @@
-# Bubbolution
-Det kan vi lägga till sen
+# Simulation of Ant Colonies
+Ant colony optimization algorithms used to simulate ant behavior.
+Implemented in Javascript and html
