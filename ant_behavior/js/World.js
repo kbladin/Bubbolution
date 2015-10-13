@@ -15,15 +15,24 @@ function World (width, height) {
 	this.antColonies = [];
 	this.foodSpawners = [];
 
-	var foodSpawnerSpec = {
+	var smallBurstSpawner = {
 		width: 5,
 		height: 5,
 		spawnTime: 1000,
 		foodAmount: 100,
 		burst: 5,
-	};	
-	this.foodSpawners.push(new FoodSpawner(this, 6, 6, foodSpawnerSpec));
-	this.foodSpawners.push(new FoodSpawner(this, width-6, 6, foodSpawnerSpec));
+	};
+	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
+	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
+
+	var fastOmniSpawner = {
+		width: width,
+		height: height,
+		spawnTime: 1,
+		foodAmount: 10,
+		burst: 1,
+	};
+	this.foodSpawners.push(new FoodSpawner(this, width/2, height/2, fastOmniSpawner));	
 
 
 	//this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
