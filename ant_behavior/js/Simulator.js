@@ -37,13 +37,6 @@ Simulator.prototype.start = function(simParams) {
 			for (var i = 0; i < thisSimulator.world.ants.length; ++i) {
 				thisSimulator.world.ants[i].act();
 			};
-
-			//Update eggs
-			for (var i = 0; i < thisSimulator.world.antColonies.length; ++i) {
-				for (var j = 0; j < thisSimulator.world.antColonies[i].eggs.length; ++j) {
-					thisSimulator.world.antColonies[i].eggs[j].update();
-				};
-			};
 			
 			//Update enemies
 			for (var i = 0; i < thisSimulator.world.enemies.length; ++i) {
@@ -63,7 +56,17 @@ Simulator.prototype.start = function(simParams) {
 							thisSimulator.world.antColonies[k].foodPheromones[i][j] *= 0.995;
 							if (thisSimulator.world.antColonies[k].foodPheromones[i][j] < 0.001)
 								thisSimulator.world.antColonies[k].foodPheromones[i][j] = 0;
-						}	
+						}
+						if (thisSimulator.world.antColonies[k].eggs[i][j] > 0) {
+							thisSimulator.world.antColonies[k].eggs[i][j]--;
+							if (thisSimulator.world.antColonies[k].eggs[i][j] <= 1){
+								// Hatch egg
+								thisSimulator.world.antColonies[k].eggs[i][j] = 0;
+								var a = new Ant(thisSimulator.world, thisSimulator.world.antColonies[k], i, j, 0);
+								a.insideNest = true;
+								thisSimulator.world.ants.push(a);
+							}
+						}
 					};
 					
 				};				

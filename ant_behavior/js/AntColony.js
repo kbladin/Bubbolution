@@ -17,11 +17,15 @@ function AntColony (world, x, y, food) {
 
 	var queen = new AntQueen(world, this, x, y, 0);
 	world.ants.push(queen);
-	this.eggs = [];
+	//this.eggs = [];
 
 	this.food = food;
 	this.buildMaterial = 0;
 
+	// Grids
+	this.eggs = Utils.createGrid(w, h, 0);
+
+	// Pheromones
 	this.homePheromones = Utils.createGrid(w, h, 0);
 	this.exitPheromones = Utils.createGrid(w, h, 0);
 	this.foodPheromones = Utils.createGrid(w, h, 0);
@@ -47,7 +51,7 @@ AntColony.prototype.hasEntranceAt = function(x, y) {
 	};
 	return false;
 };
-
+/*
 AntColony.prototype.removeEgg = function(egg) {
 	for (var i = 0; i < this.eggs.length; i++) {
 		if(this.eggs[i] === egg){
@@ -55,3 +59,4 @@ AntColony.prototype.removeEgg = function(egg) {
 		}
 	};
 };
+*/

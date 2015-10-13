@@ -13,7 +13,6 @@ function AntQueen (world, antColony, x, y, angle) {
 	this.foodPheromone = 0;
 }
 
-
 AntQueen.prototype.act = function() {
 	var actionName = this.brain.getAction();
 	this[actionName].call(this);
@@ -71,12 +70,19 @@ AntQueen.prototype.layEgg = function() {
 	a.insideNest = true;
 	this.world.ants.push(a);
 	*/
+	/*
 	var x = this.x;
 	var y = this.y;
 	var e = new Egg(this.world, this.antColony, x, y, this.angle);
 	e.insideNest = true;
 	this.antColony.eggs.push(e);
-	this.antColony.food -= this.STATIC.LAY_EGG_COST;
+	*/
+	if (!this.antColony.eggs[this.x][this.y]){
+		this.antColony.eggs[this.x][this.y] =
+			this.STATIC.EGG_MIN_AGE +
+			Math.random() * (this.STATIC.EGG_MAX_AGE - this.STATIC.EGG_MIN_AGE);
+		this.antColony.food -= this.STATIC.LAY_EGG_COST;
+	}
 };
 
 //
