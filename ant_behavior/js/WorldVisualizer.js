@@ -8,7 +8,7 @@ function WorldVisualizer (world, width, height) {
 	var bitmapSprite;
 
 	var groundColor = rgb(219, 184, 77);
-	var underGroundColor = rgb(20,10,0);
+	var underGroundColor = rgb(80,50,0);
 	var foodColor = rgb(0,255,100);
 	var dirtColor = rgb(150,100,50);
 	var nestColor = rgb(200,150,75);
@@ -139,12 +139,14 @@ function WorldVisualizer (world, width, height) {
 
 		for (var i = 0; i < world.antColonies.length; i++) {
 			// Entrances
-			var entrance = world.antColonies[i]
-			bmd.ctx.fillStyle = rgb(255,0,0);
-			bmd.ctx.beginPath();
-			bmd.ctx.fillRect((entrance.x-0.5)*dw, (entrance.y-0.5)*dh, dw, dh);
-			bmd.ctx.closePath();
-			bmd.ctx.fill();
+			var entrances = world.antColonies[i].entrances;
+			for (var j = 0; j < entrances.length; j++) {
+				bmd.ctx.fillStyle = rgb(0,0,0);
+				bmd.ctx.beginPath();
+				bmd.ctx.fillRect((entrances[j].x-0.5)*dw, (entrances[j].y-0.5)*dh, dw, dh);
+				bmd.ctx.closePath();
+				bmd.ctx.fill();
+			};
 		};
 
 		// Draw ants

@@ -32,9 +32,7 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", 
 Ant.prototype.STATIC = {
 	FOOD_PHERMONE_DECREASE: 0.005,
 	HOME_PHERMONE_DECREASE: 0.005,
-	EXIT_PHERMONE_DECREASE: 0.03,
-
-	FOOD_PHERMONE_DECREASE: 0.01,
+	EXIT_PHERMONE_DECREASE: 0.05,
 
 	MAX_INSIDE_HOMESICKNESS: 50,
 	MAX_OUTSIDE_HOMESICKNESS: 200,
@@ -44,8 +42,8 @@ Ant.prototype.STATIC = {
 
 	HUNGER_PER_FOOD: 1000,
 	LAY_EGG_COST: 10,
-	EGG_MIN_AGE: 1000,
-	EGG_MAX_AGE: 1500
+	EGG_MIN_AGE: 3000,
+	EGG_MAX_AGE: 5000
 };
 
 Ant.prototype.act = function() {
@@ -162,7 +160,25 @@ Ant.prototype.dig = function() {
 		(numReachable > 2 && numReachable < 5)) {
 		this.antColony.nest[digPosX][digPosY] = 1;
 		this.carryingDirt = true;
+		return;
 	};
+	// If failed to dig nest, check if it can dig a new entrance
+	if (this.antColony.antHill[this.x][this.y] && this.antColony.exitPheromones[this.x][this.y] < 0.5){
+		// Check so that there is no entrance close
+		var entranceClose = false;
+		for (var i=-1; i<2; i++){
+			for (var j=-1; j<2; j++){
+				if (this.antColony.hasEntranceAt(this.x + i, this.y + j)) {
+					entranceClose = true;
+					break;
+				};
+			}			
+		}
+		if (!entranceClose) {
+			this.antColony.newEntrance(this.x, this.y);
+			this.carryingDirt = true;
+		};
+	}
 }
 
 Ant.prototype.placeDirt = function() {

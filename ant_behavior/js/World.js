@@ -24,7 +24,8 @@ function World (width, height) {
 	};
 	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
-
+	this.foodSpawners.push(new FoodSpawner(this, width-30, 50, smallBurstSpawner));
+/*
 	var fastOmniSpawner = {
 		width: width-6,
 		height: height-6,
@@ -33,7 +34,7 @@ function World (width, height) {
 		burst: 1,
 	};
 	this.foodSpawners.push(new FoodSpawner(this, width/2, height/2, fastOmniSpawner));	
-
+*/
 
 	//this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
 	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 20));

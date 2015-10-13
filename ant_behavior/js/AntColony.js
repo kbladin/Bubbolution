@@ -51,6 +51,14 @@ AntColony.prototype.hasEntranceAt = function(x, y) {
 	};
 	return false;
 };
+
+AntColony.prototype.newEntrance = function(x, y) {
+	if(!this.hasEntranceAt(x,y)) {
+		this.entrances.push({x:x, y:y});
+	}
+	return false;
+};
+
 /*
 AntColony.prototype.removeEgg = function(egg) {
 	for (var i = 0; i < this.eggs.length; i++) {
