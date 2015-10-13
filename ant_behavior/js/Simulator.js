@@ -28,6 +28,11 @@ Simulator.prototype.start = function(simParams) {
 
 		thisSimulator.world.numUpdates += thisSimulator.updatesPerWait;
 		for (var n = 0; n < thisSimulator.updatesPerWait; n++) {
+
+			for (var i = 0; i < thisSimulator.world.foodSpawners.length; i++) {
+				thisSimulator.world.foodSpawners[i].update();
+			};
+
 			//Update ants
 			for (var i = 0; i < thisSimulator.world.ants.length; ++i) {
 				thisSimulator.world.ants[i].act();

@@ -5,8 +5,11 @@
 function AntColony (world, x, y, food) {
 	console.log("Creating ant colony at x:", x, " y:", y);
 	this.world = world;
-	this.x = x;
-	this.y = y;
+	this.entrances = [{
+		x: x,
+		y: y,
+	}];
+	
 
 	var w = world.width;
 	var h = world.height;
@@ -39,8 +42,14 @@ AntColony.prototype.STATIC = {
 	START_CAPACITY: 20,
 }
 
-AntColony.prototype.isEntrance = function(x, y) {
-	return this.x === x && this.y === y;
+AntColony.prototype.hasEntranceAt = function(x, y) {
+	for (var i = 0; i < this.entrances.length; i++) {
+		var entrance = this.entrances[i];
+		if(x === entrance.x && y === entrance.y){
+			return true;
+		}
+	};
+	return false;
 };
 /*
 AntColony.prototype.removeEgg = function(egg) {
