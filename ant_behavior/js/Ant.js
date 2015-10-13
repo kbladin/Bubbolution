@@ -39,10 +39,11 @@ Ant.prototype.STATIC = {
 	MAX_INSIDE_HOMESICKNESS: 50,
 	MAX_OUTSIDE_HOMESICKNESS: 200,
 
-	MAX_AGE: 150000,
-	MAX_HUNGER: 2000,
+	MAX_AGE: 1500,
+	MAX_HUNGER: 2000000,
 
 	HUNGER_PER_FOOD: 1000,
+	LAY_EGG_COST: 10,
 };
 
 Ant.prototype.act = function() {
@@ -59,6 +60,7 @@ Ant.prototype.update = function() {
 
 	if(this.age > this.STATIC.MAX_AGE || this.hunger > this.STATIC.MAX_HUNGER){
 		if(Math.random() > 0.999){
+			this.antColony.food += this.STATIC.LAY_EGG_COST * 0.8;
 			return this.world.removeAnt(this);
 		}
 	}
@@ -97,7 +99,8 @@ Ant.prototype.update = function() {
 		if (!this.carryingDirt && this.world.food[this.x][this.y] > 0){
 			this.world.food[this.x][this.y]--;
 			this.carryingFood = true;
-			this.foodPheromone = 1;
+			this.foodPheromone = Math.min(this.world.food[this.x][this.y], 1);
+			this.homePheromone = 0;
 		}
 	}
 
@@ -117,54 +120,7 @@ Ant.prototype.update = function() {
 //
 
 Ant.prototype.walk = function() {
-	// Sensorposition to check if it can walk forward in a nest
-	var sensorPosition = this.getRelativeSensorPosition().center;
-	if (
-		(this.insideNest && this.antColony.nest[this.x + sensorPosition.x][this.y + sensorPosition.y]) ||
-		!this.insideNest ) {
-		switch(this.angle) {
-		    case 0:
-		        this.x++;
-		        break;
-		    case 1:
-		        this.x++;
-		        this.y++;
-		        break;
-		    case 2:
-		        this.y++;
-		        break;
-		    case 3:
-		        this.x--;
-		        this.y++;
-		        break;
-		    case 4:
-		        this.x--;
-		        break;
-		    case 5:
-		        this.x--;
-		        this.y--;
-		        break;
-		    case 6:
-		        this.y--;
-		        break;
-		    case 7:
-		        this.x++;
-		        this.y--;
-		        break;
-		    default:
-		        break;
-		}
-		// The borders are set like this because the ants can sample points on sensors in front of them
-		if(this.x < 3)
-			this.x = 3;
-		if(this.x > this.world.width - 3)
-			this.x = this.world.width - 3;
-		if(this.y < 3)
-			this.y = 3;
-		if(this.y > this.world.height - 3)
-			this.y = this.world.height - 3;
-	}
-	return;
+	MoveLogic.walk(this);
 };
 
 Ant.prototype.idle = function(){
@@ -172,17 +128,11 @@ Ant.prototype.idle = function(){
 }
 
 Ant.prototype.turnLeft = function() {
-	this.angle--;
-	if (this.angle < 0)
-		this.angle = 7;
-	return;
+	MoveLogic.turnLeft(this);
 };
 
 Ant.prototype.turnRight = function() {
-	this.angle++;
-	if (this.angle > 7)
-		this.angle = 0;
-	return;
+	MoveLogic.turnRight(this);
 };
 
 Ant.prototype.dig = function() {
@@ -281,80 +231,7 @@ Ant.prototype.getDirectionToHighestPheromone = function(pheromoneMap) {
 }
 
 Ant.prototype.getRelativeSensorPosition = function() {
-	var sensorPoints = {};
-	sensorPoints.left = {};
-	sensorPoints.center = {};
-	sensorPoints.right = {};
-
-	switch(this.angle) {
-	    case 0:
-	        sensorPoints.left.x = 1;
-	        sensorPoints.left.y = -1;
-	        sensorPoints.center.x = 1;
-	        sensorPoints.center.y = 0;
-	        sensorPoints.right.x = 1;
-	        sensorPoints.right.y = 1;
-	        break;
-	    case 1:
-	        sensorPoints.left.x = 1;
-	        sensorPoints.left.y = 0;
-	        sensorPoints.center.x = 1;
-	        sensorPoints.center.y = 1;
-	        sensorPoints.right.x = 0;
-	        sensorPoints.right.y = 1;
-	        break;
-	    case 2:
-	        sensorPoints.left.x = 1;
-	        sensorPoints.left.y = 1;
-	        sensorPoints.center.x = 0;
-	        sensorPoints.center.y = 1;
-	        sensorPoints.right.x = -1;
-	        sensorPoints.right.y = 1;
-	        break;
-	    case 3:
-	        sensorPoints.left.x = 1;
-	        sensorPoints.left.y = 0;
-	        sensorPoints.center.x = -1;
-	        sensorPoints.center.y = 1;
-	        sensorPoints.right.x = -1;
-	        sensorPoints.right.y = 0;
-	        break;
-	    case 4:
-	        sensorPoints.left.x = -1;
-	        sensorPoints.left.y = 1;
-	        sensorPoints.center.x = -1;
-	        sensorPoints.center.y = 0;
-	        sensorPoints.right.x = -1;
-	        sensorPoints.right.y = -1;
-	        break;
-	    case 5:
-	        sensorPoints.left.x = -1;
-	        sensorPoints.left.y = 0;
-	        sensorPoints.center.x = -1;
-	        sensorPoints.center.y = -1;
-	        sensorPoints.right.x = 0;
-	        sensorPoints.right.y = -1;
-	        break;
-	    case 6:
-	        sensorPoints.left.x = -1;
-	        sensorPoints.left.y = -1;
-	        sensorPoints.center.x = 0;
-	        sensorPoints.center.y = -1;
-	        sensorPoints.right.x = 1;
-	        sensorPoints.right.y = -1;
-	        break;
-	    case 7:
-	        sensorPoints.left.x = 0;
-	        sensorPoints.left.y = -1;
-	        sensorPoints.center.x = 1;
-	        sensorPoints.center.y = -1;
-	        sensorPoints.right.x = 1;
-	        sensorPoints.right.y = 0;
-	        break;
-	    default:
-	        break;
-	}
-	return sensorPoints;
+	return MoveLogic.getRelativeSensorPosition(this);
 }
 
 Ant.prototype.lostInsideNest = function(){
@@ -370,14 +247,7 @@ Ant.prototype.lostOutsideNest = function(){
 //
 
 Ant.prototype.wander = function() {
-	var r = Math.random();
-	if (r < 0.33) {
-		this.turnLeft();
-	}
-	else if (0.67 > r) {
-		this.turnRight();
-	}
-	this.walk();
+	MoveLogic.wander(this);
 }
 
 Ant.prototype.lookForHome = function() {
@@ -393,6 +263,12 @@ Ant.prototype.lookForHome = function() {
 		this.wander();
 	}
 }
+
+Ant.prototype.canWalk = function() {
+	// Relative Sensor Position
+	var rsp = this.getRelativeSensorPosition().center;
+	return !this.insideNest || this.antColony.nest[this.x + rsp.x][this.y + rsp.y];
+};
 
 Ant.prototype.lookForExit = function() {
 	// Find the way
