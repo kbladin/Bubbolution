@@ -60,8 +60,8 @@ Ant.prototype.update = function() {
 
 	if(this.age > this.STATIC.MAX_AGE || this.hunger > this.STATIC.MAX_HUNGER){
 		if(Math.random() > 0.999){
-			this.antColony.food += this.STATIC.LAY_EGG_COST * 0.8;
-			return this.world.removeAnt(this);
+			this.kill();
+			return;
 		}
 	}
 
@@ -126,6 +126,11 @@ Ant.prototype.walk = function() {
 Ant.prototype.idle = function(){
 	return;
 }
+
+Ant.prototype.kill = function() {
+	this.antColony.food += this.STATIC.LAY_EGG_COST * 0.8;
+	this.world.removeAnt(this);
+};
 
 Ant.prototype.turnLeft = function() {
 	MoveLogic.turnLeft(this);

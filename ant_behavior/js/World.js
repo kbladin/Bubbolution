@@ -11,6 +11,7 @@ function World (width, height) {
 	this.numUpdates = 0;
 
 	this.ants = [];
+	this.enemies = [];
 	this.antColonies = [];
 
 
@@ -20,6 +21,15 @@ function World (width, height) {
 	this.antColonies.push(new AntColony(this, width/2, height/2, 150));
 	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
 
+	enemyParams = {
+		radius: 10,
+		antKillChance: 0.1,
+		attackCoolDown: 5,
+		walkCoolDown: 50,
+		hp: 1000,
+	};
+	var enemy = new Enemy(this, 2, 2, enemyParams);
+	this.enemies.push(enemy)
 };
 
 World.prototype.initGridData = function() {

@@ -165,5 +165,18 @@ function WorldVisualizer (world, width, height) {
 				}
 			}
 		}
+
+		for (var i = 0; i < world.enemies.length; i++) {
+			var enemy = world.enemies[i];
+
+			var xPos = dw * enemy.x;
+			var yPos = dw * enemy.y;
+
+			bmd.ctx.fillStyle = '#FF0000';
+			bmd.ctx.beginPath();
+			bmd.ctx.arc(xPos, yPos, enemy.radius, 0, Math.PI*2, true); 
+			bmd.ctx.closePath();
+			bmd.ctx.fill();
+		};
 	}
 }
