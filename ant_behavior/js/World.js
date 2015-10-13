@@ -21,15 +21,16 @@ function World (width, height) {
 	this.antColonies.push(new AntColony(this, width/2, height/2, 150));
 	//this.antColonies.push(new AntColony(this, 3*width/4, height/2, 200));
 
-	enemyParams = {
-		radius: 10,
-		antKillChance: 0.1,
-		attackCoolDown: 5,
-		walkCoolDown: 50,
-		hp: 1000,
-	};
-	var enemy = new Enemy(this, 2, 2, enemyParams);
-	this.enemies.push(enemy)
+
+	//enemyParams = {
+	//	radius: 10,
+	//	antKillChance: 0.9,
+	//	attackCoolDown: 5,
+	//	walkCoolDown: 50,
+	//	hp: 1000,
+	//};
+	//var enemy = new Enemy(this, 2, 2, enemyParams);
+	//this.enemies.push(enemy)
 };
 
 World.prototype.initGridData = function() {
@@ -46,7 +47,7 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-
+		return 10;
 		if(Utils.insideRect(i, j, cx, cy + 20, 15, 15)){
 			return 10;
 		}

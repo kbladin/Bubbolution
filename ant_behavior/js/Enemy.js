@@ -15,7 +15,7 @@ function Enemy(world, x, y, stats){
 }
 
 Enemy.prototype.act = function() {
-	this.wander();
+	//this.wander();
 	this.attack();
 };
 
@@ -31,6 +31,7 @@ Enemy.prototype.attack = function() {
 		for (var i = 0; i < this.world.ants.length; i++) {
 			var ant = this.world.ants[i];
 			if(Math.random() < this.antKillChance && this.reachable(ant)){
+				console.log("kill ant");
 				ant.kill();
 			}
 		};
