@@ -39,8 +39,8 @@ Ant.prototype.STATIC = {
 
 	FOOD_PHERMONE_DECREASE: 0.01,
 
-	MAX_INSIDE_HOMESICKNESS: 200,
-	MAX_OUTSIDE_HOMESICKNESS: 1000,
+	MAX_INSIDE_HOMESICKNESS: 50,
+	MAX_OUTSIDE_HOMESICKNESS: 200,
 
 	MAX_AGE: 150000,
 	MAX_HUNGER: 2000,
@@ -109,7 +109,7 @@ Ant.prototype.update = function() {
 
 	// Loose pheromones
 	this.homePheromone -= this.STATIC.HOME_PHERMONE_DECREASE;
-	this.exitPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
+	this.exitPheromone -= this.STATIC.EXIT_PHERMONE_DECREASE;
 	this.foodPheromone -= this.STATIC.FOOD_PHERMONE_DECREASE;
 
 	// Update timer
