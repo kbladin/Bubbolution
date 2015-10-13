@@ -69,9 +69,8 @@ World.prototype.initGridData = function() {
 
 World.prototype.entranceToAnthillAt = function(x, y) {
 	for(var i = 0; i<this.antColonies.length; ++i){
-		var anthill = this.antColonies[i];
-		if(anthill.x === x && anthill.y === y){
-			return anthill;
+		if(this.antColonies[i].hasEntranceAt(x, y)){
+			return this.antColonies[i];
 		}
 	}
 	return null;
