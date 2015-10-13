@@ -73,7 +73,7 @@ Ant.prototype.update = function() {
 			this.homePheromone = 1;
 			this.exitPheromone = 0;
 			this.foodPheromone = 0;
-			
+
 			this.homeSickTimer = 0;
 		}
 	} 
@@ -99,7 +99,7 @@ Ant.prototype.update = function() {
 			}
 		}
 		// Check if food is found
-		if (this.world.food[this.x][this.y] > 0){
+		if (!this.carryingDirt && this.world.food[this.x][this.y] > 0){
 			this.world.food[this.x][this.y]--;
 			this.carryingFood = true;
 			this.foodPheromone = 1;
@@ -208,8 +208,6 @@ Ant.prototype.dig = function() {
 	};
 	var numReachable = this.getNumReachable(this.antColony.nest);
 
-	//console.log(sensorPosition);
-
 	if (!this.antColony.nest[digPosX][digPosY] &&
 		(numReachableSensor == 3 || numReachableSensor == 2) &&
 		(numReachable > 2 && numReachable < 5)) {
@@ -220,17 +218,11 @@ Ant.prototype.dig = function() {
 
 Ant.prototype.placeDirt = function() {
 	// The ant can only place dirt at the rim of the anthill
-	var sensorPosition = this.getRelativeSensorPosition();
-	var numReachableSensor = 0;
-	for (var i = -1; i <= 1; i++) {
-		for (var j = -1; j <= 1; j++) {
-			if (this.antColony.antHill[this.x + sensorPosition.center.x + i][this.y + sensorPosition.center.x + j])
-				numReachableSensor++;
-		};
-	};
-	if (!this.antColony.antHill[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] &&
-		(numReachableSensor >= 3)) {
-		this.antColony.antHill[this.x + sensorPosition.center.x][this.y + sensorPosition.center.y] += 1;
+	var antHill = this.antColony.antHill;
+	var numReachableAnthill = this.getNumReachable(antHill);
+
+	if (numReachableAnthill >= 1 && antHill[this.x][this.y] === 0) {
+		this.antColony.antHill[this.x][this.y] += 1;
 		this.carryingDirt = false;
 	};
 }
