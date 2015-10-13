@@ -13,6 +13,17 @@ function World (width, height) {
 	this.ants = [];
 	this.enemies = [];
 	this.antColonies = [];
+	this.foodSpawners = [];
+
+	var foodSpawnerSpec = {
+		width: 5,
+		height: 5,
+		spawnTime: 1000,
+		foodAmount: 100,
+		burst: 5,
+	};	
+	this.foodSpawners.push(new FoodSpawner(this, 6, 6, foodSpawnerSpec));
+	this.foodSpawners.push(new FoodSpawner(this, width-6, 6, foodSpawnerSpec));
 
 
 	//this.antColonies.push(new AntColony(this, 1*width/4, height/2, 20));
@@ -47,14 +58,14 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-		return 10;
+		return 0;
 		if(Utils.insideRect(i, j, cx, cy + 20, 15, 15)){
 			return 10;
 		}
 		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
 			return 10;
 		}
-		if(Utils.insideRect(i, j, 35, 35, 50, 50)){
+		if(Utils.insideRect(i, j, 35, 35, 5, 5)){
 			return 10;
 		}
 		if(Utils.insideRect(i, j, w-10, 10, 5, 5)){
