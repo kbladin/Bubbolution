@@ -44,6 +44,8 @@ Ant.prototype.STATIC = {
 
 	HUNGER_PER_FOOD: 1000,
 	LAY_EGG_COST: 10,
+	EGG_MIN_AGE: 1000,
+	EGG_MAX_AGE: 1500
 };
 
 Ant.prototype.act = function() {

@@ -89,9 +89,17 @@ function WorldVisualizer (world, width, height) {
 							bmd.ctx.fillRect(xPos, yPos, dw, dh);
 							bmd.ctx.closePath();
 							bmd.ctx.fill();
-						};
+						}
+						if (!aboveGround && world.antColonies[k].eggs[i][j] > 0) {
+							// Draw eggs
+							var eggRadius = width / world.width * 0.5;
+							bmd.ctx.fillStyle = '#FFFFFF';
+							bmd.ctx.beginPath();
+							bmd.ctx.arc(xPos + 0.5 * dw, yPos + 0.5 * dh, eggRadius, 0, Math.PI*2, true); 
+							bmd.ctx.closePath();
+							bmd.ctx.fill();
+						}
 					}
-
 
 					// PHEROMONES
 					if (drawPheromones){
@@ -137,22 +145,6 @@ function WorldVisualizer (world, width, height) {
 			bmd.ctx.fillRect((entrance.x-0.5)*dw, (entrance.y-0.5)*dh, dw, dh);
 			bmd.ctx.closePath();
 			bmd.ctx.fill();
-
-			// Draw eggs
-			for (var j = 0; j < world.antColonies[i].eggs.length; j++) {
-				egg = world.antColonies[i].eggs[j];
-				var xPos = dw * egg.x;
-				var yPos = dh * egg.y;
-				var eggRadius = width / world.width * 0.7;
-				if (aboveGround == !egg.insideNest) {
-					// Center piece
-					bmd.ctx.fillStyle = '#FFFFFF';
-					bmd.ctx.beginPath();
-					bmd.ctx.arc(xPos, yPos, eggRadius, 0, Math.PI*2, true); 
-					bmd.ctx.closePath();
-					bmd.ctx.fill();
-				}
-			};
 		};
 
 		// Draw ants
