@@ -26,10 +26,10 @@ function World (width, height) {
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
 
 	var fastOmniSpawner = {
-		width: width,
-		height: height,
+		width: width-6,
+		height: height-6,
 		spawnTime: 1,
-		foodAmount: 10,
+		foodAmount: 1,
 		burst: 1,
 	};
 	this.foodSpawners.push(new FoodSpawner(this, width/2, height/2, fastOmniSpawner));	

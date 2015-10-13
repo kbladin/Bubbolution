@@ -143,10 +143,10 @@ Ant.prototype.turnRight = function() {
 };
 
 Ant.prototype.dig = function() {
-	var sensorPosition = this.getRelativeSensorPosition();
+	var centerSensorPosition = MoveLogic.getRelativeCenterSensorPosition(this);
 
-	var digPosX = this.x + sensorPosition.center.x;
-	var digPosY = this.y + sensorPosition.center.y;
+	var digPosX = this.x + centerSensorPosition.x;
+	var digPosY = this.y + centerSensorPosition.y;
 
 	var numReachableSensor = 0;
 	for (var i = -1; i <= 1; i++) {

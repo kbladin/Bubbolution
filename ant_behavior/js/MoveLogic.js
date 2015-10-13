@@ -1,5 +1,45 @@
 var MoveLogic = {
 
+	getRelativeCenterSensorPosition: function(movable){
+		var center = {};
+
+		switch(movable.angle) {
+		    case 0:
+		        center.x = 1;
+		        center.y = 0;
+		        break;
+		    case 1:
+		        center.x = 1;
+		        center.y = 1;
+		        break;
+		    case 2:
+		        center.x = 0;
+		        center.y = 1;
+		        break;
+		    case 3:
+		        center.x = -1;
+		        center.y = 1;
+		        break;
+		    case 4:
+		        center.x = -1;
+		        center.y = 0;
+		        break;
+		    case 5:
+		        center.x = -1;
+		        center.y = -1;
+		        break;
+		    case 6:
+		        center.x = 0;
+		        center.y = -1;
+		        break;
+		    case 7:
+		        center.x = 1;
+		        center.y = -1;
+		        break;
+		}
+		return center;
+	},
+
 	getRelativeSensorPosition: function(movable){
 		var sensorPoints = {};
 		sensorPoints.left = {};
