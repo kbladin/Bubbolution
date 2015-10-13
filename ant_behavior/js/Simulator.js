@@ -32,6 +32,11 @@ Simulator.prototype.start = function(simParams) {
 			for (var i = 0; i < thisSimulator.world.ants.length; ++i) {
 				thisSimulator.world.ants[i].act();
 			};
+			
+			//Update enemies
+			for (var i = 0; i < thisSimulator.world.enemies.length; ++i) {
+				thisSimulator.world.enemies[i].act();
+			};
 
 			// Update world
 			for (var i = 0; i < thisSimulator.world.width; i++) {
