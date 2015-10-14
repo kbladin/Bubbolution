@@ -44,9 +44,9 @@ UserInput.prototype.initDomElements = function(parentElement){
 	// Create Stats container
 	var guiContainer = document.createElement('DIV');
 	guiContainer.id = "control";
-	guiContainer.style.background = "white";
+	//guiContainer.style.background = "white";
 	//guiContainer.style.position = "absolute";
-	guiContainer.style.bottom = "0px";
+	//guiContainer.style.bottom = "0px";
 	parentElement.appendChild(guiContainer);
 /*
 	//Num agents

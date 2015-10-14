@@ -17,7 +17,8 @@ Simulator.prototype.start = function(simParams) {
 
 	var thisSimulator = this;
 	this.loop = setInterval(function() {
-		if(--thisSimulator.skip > 0){
+		var play = document.getElementById('playCheckBox').checked;
+		if(--thisSimulator.skip > 0 || !play){
 			return;
 		}
 

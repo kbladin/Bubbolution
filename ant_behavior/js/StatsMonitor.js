@@ -8,31 +8,31 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 
 	// Populate monitor data
 	this.monitorData.push({
-		label: "num updates", 
+		label: "Time steps", 
 		getValue: function(){return world.numUpdates;}
 	});
 	this.monitorData.push({
-		label: "num ants", 
+		label: "Colony size", 
 		getValue: function(){return world.ants.length;}
 	});
 	this.monitorData.push({
-		label: "num foods",
+		label: "Food in world",
 		getValue: function(){return world.sumGridValues(world.food); }
 	});
 	this.monitorData.push({
-		label: "total home phermones", 
+		label: "Home pheromones", 
 		getValue: function(){return world.sumGridValues(world.antColonies[0].homePheromones).toFixed(2);}
 	});
 	this.monitorData.push({
-		label: "total food phermones", 
+		label: "Food phermones", 
 		getValue: function(){return world.sumGridValues(world.antColonies[0].foodPheromones).toFixed(2);}
 	});
 	this.monitorData.push({
-		label: "anthill food", 
+		label: "Food in nest", 
 		getValue: function(){return world.antColonies[0].food;}
-	});
+	});/*
 	this.monitorData.push({
-		label: "anthill buildMaterial", 
+		label: "Build material", 
 		getValue: function(){return world.antColonies[0].buildMaterial;}
 	});
 	this.monitorData.push({
@@ -52,7 +52,7 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 			}
 			return '?';
 		}
-	});
+	});*/
 	
 	this.initDomElements(parentElement, leftAdjust);
 };
@@ -60,8 +60,6 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 StatsMonitor.prototype.initDomElements = function(parentElement, leftAdjust){
 	// Create Stats container
 	var statsContainer = document.createElement('DIV');
-	statsContainer.style.background = "white";
-	statsContainer.style.position = "absolute";
 	statsContainer.style.left = leftAdjust + "px";
 	parentElement.appendChild(statsContainer);
 

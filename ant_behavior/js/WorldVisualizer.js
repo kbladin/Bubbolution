@@ -3,7 +3,7 @@
 //
 
 function WorldVisualizer (world, width, height) {
-	var game = new Phaser.Game(width, height, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
+	var game = new Phaser.Game(width, height, Phaser.AUTO, 'canvas-id', { preload: preload, create: create, update: update });
 	var bmd;
 	var bitmapSprite;
 
@@ -25,11 +25,19 @@ function WorldVisualizer (world, width, height) {
 	}
 	
 	function create() {
-        bmd = game.add.bitmapData(width, height);
+        bmd = game.add.bitmapData(game.width, game.height);
         bitmapSprite = game.add.sprite(0, 0, bmd);
 
         var canvasElement = document.getElementsByTagName('canvas')[0];
         canvasElement.style.float = "left";
+	}
+
+	function resize(w, h) {
+		game.width = w;
+		game.height = h;
+		game.stage.bounds.width = w;
+		game.stage.bounds.height = h;
+		bmd.clear(0,0,game.width, game.height);
 	}
 
 	function rgb(r,g,b){
@@ -40,23 +48,21 @@ function WorldVisualizer (world, width, height) {
 		return'rgb(' + r + ',' + g + ',' + b + ',' + a + ')';
 	}
 	
-	function update() {		
-		bmd.clear(0,0,width, height);
-		
+	function update() {
 		// To decide what to draw
-		var aboveGround = document.getElementById('aboveGroundRadio').checked;
+		var aboveGround = document.getElementById('aboveGroundCheckBox').checked;
 		var drawPheromones = document.getElementById('drawPheromonesCheckBox').checked;
 		var drawAnts = document.getElementById('drawAntsCheckBox').checked;
 		var detailedGraphics = document.getElementById('drawDetailedCheckBox').checked;
 
 		bmd.ctx.fillStyle = aboveGround ? groundColor : underGroundColor;
 		bmd.ctx.beginPath();
-		bmd.ctx.fillRect(0, 0, width, height);
+		bmd.ctx.fillRect(0, 0, game.width, game.height);
 		bmd.ctx.closePath();
 		bmd.ctx.fill();
 
-		var dw = width / world.width;
-		var dh = height / world.height;
+		var dw = game.width / world.width;
+		var dh = game.height / world.height;
 
 		for (var i = 0; i < world.width; i++) {
 			for (var j = 0; j < world.height; j++) {
@@ -92,7 +98,7 @@ function WorldVisualizer (world, width, height) {
 						}
 						if (!aboveGround && world.antColonies[k].eggs[i][j] > 0) {
 							// Draw eggs
-							var eggRadius = width / world.width * 0.5;
+							var eggRadius = game.width / world.width * 0.5;
 							bmd.ctx.fillStyle = '#FFFFFF';
 							bmd.ctx.beginPath();
 							bmd.ctx.arc(xPos + 0.5 * dw, yPos + 0.5 * dh, eggRadius, 0, Math.PI*2, true); 
@@ -155,7 +161,7 @@ function WorldVisualizer (world, width, height) {
 				var ant = world.ants[i];
 
 				var antRadius = (ant instanceof AntQueen) ? 1.3 : 0.7;
-				antRadius *= width / world.width;
+				antRadius *= game.width / world.width;
 
 				var xPos = dw * ant.x;
 				var yPos = dh * ant.y;
