@@ -53,7 +53,7 @@ Simulator.prototype.start = function(simParams) {
 								thisSimulator.world.antColonies[k].homePheromones[i][j] = 0;
 						}
 						if (thisSimulator.world.antColonies[k].foodPheromones[i][j] > 0) {
-							thisSimulator.world.antColonies[k].foodPheromones[i][j] *= 0.995;
+							thisSimulator.world.antColonies[k].foodPheromones[i][j] *= 0.999;
 							if (thisSimulator.world.antColonies[k].foodPheromones[i][j] < 0.001)
 								thisSimulator.world.antColonies[k].foodPheromones[i][j] = 0;
 						}
