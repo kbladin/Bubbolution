@@ -66,6 +66,7 @@
 		var visualizer = new WorldVisualizer(world, 800, 600);
 		var monitorEle = document.getElementById('statsMonitorDiv');
 		var statsMonitor = new StatsMonitor(world, monitorEle, 800);
+		var interactor = new Interactor(world, world.food);
 
 		statsMonitor.start({waitTime: 1000});
 
