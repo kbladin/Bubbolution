@@ -49,6 +49,8 @@ function WorldVisualizer (world, width, height) {
 	}
 	
 	function update() {
+		bmd.clear(0,0,width, height);
+		
 		// To decide what to draw
 		var aboveGround = document.getElementById('aboveGroundCheckBox').checked;
 		var drawPheromones = document.getElementById('drawPheromonesCheckBox').checked;
@@ -138,9 +140,9 @@ function WorldVisualizer (world, width, height) {
 								bmd.ctx.fill();
 							};
 						}
-					}					
+					}
 				};
-			};			
+			};
 		};
 
 		for (var i = 0; i < world.antColonies.length; i++) {

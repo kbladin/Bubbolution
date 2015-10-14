@@ -1,4 +1,6 @@
-var antCount = 0;
+//
+// Ant
+//
 
 function Ant (world, antColony, x, y, angle) {
 	this.world = world;

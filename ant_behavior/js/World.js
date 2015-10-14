@@ -20,7 +20,7 @@ function World (width, height) {
 		height: 5,
 		spawnTime: 1000,
 		foodAmount: 100,
-		burst: 5,
+		burst: 3,
 	};
 	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
