@@ -1,3 +1,8 @@
+//
+// Interactor
+//
+// Use this class to define user interaction with the canvas or ant colonies
+
 function Interactor(world){
 	this.world = world;
 

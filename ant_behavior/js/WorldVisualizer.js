@@ -40,7 +40,7 @@ function WorldVisualizer (world, width, height) {
 		return'rgb(' + r + ',' + g + ',' + b + ',' + a + ')';
 	}
 	
-	function update() {		
+	function update() {
 		bmd.clear(0,0,width, height);
 		
 		// To decide what to draw
@@ -132,9 +132,9 @@ function WorldVisualizer (world, width, height) {
 								bmd.ctx.fill();
 							};
 						}
-					}					
+					}
 				};
-			};			
+			};
 		};
 
 		for (var i = 0; i < world.antColonies.length; i++) {
