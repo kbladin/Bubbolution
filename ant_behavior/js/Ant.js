@@ -34,7 +34,7 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", 
 Ant.prototype.STATIC = {
 	FOOD_PHERMONE_DECREASE: 0.005,
 	HOME_PHERMONE_DECREASE: 0.005,
-	EXIT_PHERMONE_DECREASE: 0.05,
+	EXIT_PHERMONE_DECREASE: 0.03,
 
 	MAX_INSIDE_HOMESICKNESS: 50,
 	MAX_OUTSIDE_HOMESICKNESS: 200,
@@ -69,11 +69,13 @@ Ant.prototype.update = function() {
 
 	if (this.insideNest) {
 		// Check if exit is found and inside
-		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony) {
+		if (this.world.entranceToAnthillAt(this.x,this.y) === this.antColony &&
+			(this.lostInsideNest() || this.carryingDirt) ) {
 			this.insideNest = false;
 			this.homePheromone = 1;
 			this.exitPheromone = 0;
 			this.foodPheromone = 0;
+			this.angle = Math.floor(Math.random() * 7);
 		}
 	} 
 	else {
@@ -90,6 +92,7 @@ Ant.prototype.update = function() {
 			this.exitPheromone = 1;
 			this.foodPheromone = 0;
 			this.homePheromone = 0;
+			this.angle = Math.floor(Math.random() * 7);
 
 			//this.homeSickTimer = 0;
 			if(this.antColony.food > 0 && this.hunger > this.STATIC.HUNGER_PER_FOOD){
@@ -165,7 +168,7 @@ Ant.prototype.dig = function() {
 		return;
 	};
 	// If failed to dig nest, check if it can dig a new entrance
-	if (this.antColony.antHill[this.x][this.y] && this.antColony.exitPheromones[this.x][this.y] < 0.5){
+	if (this.antColony.antHill[this.x][this.y] && this.antColony.exitPheromones[this.x][this.y] < 0.7){
 		// Check so that there is no entrance close
 		var entranceClose = false;
 		for (var i=-1; i<2; i++){
