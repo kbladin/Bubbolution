@@ -34,7 +34,7 @@ Ant.prototype.AVAILABLE_ACTIONS = ["lookForFood", "lookForHome", "lookForExit", 
 Ant.prototype.STATIC = {
 	FOOD_PHERMONE_DECREASE: 0.005,
 	HOME_PHERMONE_DECREASE: 0.005,
-	EXIT_PHERMONE_DECREASE: 0.03,
+	EXIT_PHERMONE_DECREASE: 0.04,
 
 	MAX_INSIDE_HOMESICKNESS: 50,
 	MAX_OUTSIDE_HOMESICKNESS: 200,
@@ -168,7 +168,7 @@ Ant.prototype.dig = function() {
 		return;
 	};
 	// If failed to dig nest, check if it can dig a new entrance
-	if (this.antColony.antHill[this.x][this.y] && this.antColony.exitPheromones[this.x][this.y] < 0.7){
+	if (this.antColony.antHill[this.x][this.y] && this.antColony.exitPheromones[this.x][this.y] < 0.6){
 		// Check so that there is no entrance close
 		var entranceClose = false;
 		for (var i=-1; i<2; i++){
@@ -295,7 +295,7 @@ Ant.prototype.lookForHome = function() {
 Ant.prototype.canWalk = function() {
 	// Relative Sensor Position
 	var rsp = this.getRelativeSensorPosition().center;
-	return (!this.insideNest && !this.world.obstacles[this.x + rsp.x][this.y + rsp.y]) || this.antColony.nest[this.x + rsp.x][this.y + rsp.y];
+	return (!this.insideNest && !this.world.obstacles[this.x + rsp.x][this.y + rsp.y]) || (this.insideNest && this.antColony.nest[this.x + rsp.x][this.y + rsp.y]);
 };
 
 Ant.prototype.lookForExit = function() {
