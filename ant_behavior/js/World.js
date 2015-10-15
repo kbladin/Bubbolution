@@ -24,7 +24,7 @@ function World (width, height) {
 	};
 	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
-	this.foodSpawners.push(new FoodSpawner(this, width-30, 50, smallBurstSpawner));
+	//this.foodSpawners.push(new FoodSpawner(this, width-30, 50, smallBurstSpawner));
 /*
 	var fastOmniSpawner = {
 		width: width-6,
@@ -68,10 +68,10 @@ World.prototype.initGridData = function() {
 	this.food = Utils.createGrid(w, h, function (i,j){
 		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
 		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-		return 0;
-		if(Utils.insideRect(i, j, cx, cy + 20, 15, 15)){
+		//	return 0;
+		if(Utils.insideRect(i, j, cx, cy + 20, 5, 5)){
 			return 10;
-		}
+		}/*
 		if(Utils.insideRect(i, j, 5, 5, 5, 5)){
 			return 10;
 		}
@@ -80,12 +80,14 @@ World.prototype.initGridData = function() {
 		}
 		if(Utils.insideRect(i, j, w-10, 10, 5, 5)){
 			return 0;
-		}
+		}*/
 		if(Math.random() > 0.999){
 			return 1;
 		}
 		return 0;
 	});
+
+	this.obstacles = Utils.createGrid(w, h, false);
 };
 
 World.prototype.entranceToAnthillAt = function(x, y) {

@@ -292,7 +292,7 @@ Ant.prototype.lookForHome = function() {
 Ant.prototype.canWalk = function() {
 	// Relative Sensor Position
 	var rsp = this.getRelativeSensorPosition().center;
-	return !this.insideNest || this.antColony.nest[this.x + rsp.x][this.y + rsp.y];
+	return (!this.insideNest && !this.world.obstacles[this.x + rsp.x][this.y + rsp.y]) || this.antColony.nest[this.x + rsp.x][this.y + rsp.y];
 };
 
 Ant.prototype.lookForExit = function() {
