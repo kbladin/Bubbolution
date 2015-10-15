@@ -280,7 +280,7 @@ Ant.prototype.lookForHome = function() {
 	var pheromoneDirectionToHome = this.getDirectionToHighestPheromone(this.antColony.homePheromones)
 
 	var random = Math.random();
-	if (pheromoneDirectionToHome != -1 && random > 0.1) {
+	if (pheromoneDirectionToHome != -1 && random < 0.6) {
 		this.angle = pheromoneDirectionToHome;
 		this.walk();
 	}
@@ -300,7 +300,7 @@ Ant.prototype.lookForExit = function() {
 	var pheromoneDirectionToExit = this.getDirectionToHighestPheromone(this.antColony.exitPheromones)
 
 	var random = Math.random();
-	if (pheromoneDirectionToExit != -1 && random > 0.1) {
+	if (pheromoneDirectionToExit != -1 && random < 0.6) {
 		this.angle = pheromoneDirectionToExit;
 		this.walk();
 	}
@@ -314,7 +314,7 @@ Ant.prototype.lookForFood = function() {
 	var pheromoneDirectionToFood = this.getDirectionToHighestPheromone(this.antColony.foodPheromones)
 
 	var random = Math.random();
-	if (pheromoneDirectionToFood != -1 && random > 0.1) {
+	if (pheromoneDirectionToFood != -1 && random < 0.6) {
 		this.angle = pheromoneDirectionToFood;
 		this.walk();
 	}
