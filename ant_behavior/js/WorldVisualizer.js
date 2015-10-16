@@ -12,6 +12,7 @@ function WorldVisualizer (world, width, height) {
 	var foodColor = rgb(0,255,100);
 	var dirtColor = rgb(150,100,50);
 	var nestColor = rgb(200,150,75);
+	var obstacleColor = rgb(200,150,75);
 
 	var antColor = {
 		head : '#550000',
@@ -72,6 +73,13 @@ function WorldVisualizer (world, width, height) {
 				var yPos = dh * j - 0.5 * dh;
 
 				if (aboveGround) {
+					if (world.obstacles[i][j]) {
+						bmd.ctx.fillStyle = obstacleColor;
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
 					if (world.food[i][j] > 0) {
 						bmd.ctx.fillStyle = foodColor;
 						bmd.ctx.beginPath();

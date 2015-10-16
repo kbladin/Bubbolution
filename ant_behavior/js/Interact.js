@@ -35,9 +35,17 @@ function Interactor(world){
 		var mousePos = getMousePos(canvas, e);
 		var x = Math.floor(mousePos.x / canvas.width * world.width);
 		var y = Math.floor(mousePos.y / canvas.height * world.height);
+
 		for (var i = -1; i <= 1; i++) {
 			for (var j = -1; j <= 1; j++) {
-				world.food[x+i][y+j] += 2;
+				if (document.getElementById("radio_food").checked){
+					world.food[x+i][y+j] += 2;
+				} else if (document.getElementById("radio_obst").checked){
+					world.obstacles[x+i][y+j] = true;
+				} else {
+					world.food[x+i][y+j] = 0;
+					world.obstacles[x+i][y+j] = false;
+				}
 			};
 		};
 	}
