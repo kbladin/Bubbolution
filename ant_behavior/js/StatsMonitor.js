@@ -20,17 +20,19 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 		getValue: function(){return world.sumGridValues(world.food); }
 	});
 	this.monitorData.push({
+		label: "Food in nest", 
+		getValue: function(){return world.antColonies[0].food;}
+	});
+	/*
+	this.monitorData.push({
 		label: "Home pheromones", 
-		getValue: function(){return world.sumGridValues(world.antColonies[0].homePheromones).toFixed(2);}
+		getValue: function(){return world.sumGridValues(world.antColonies[0].homePheromones);}
 	});
 	this.monitorData.push({
 		label: "Food phermones", 
-		getValue: function(){return world.sumGridValues(world.antColonies[0].foodPheromones).toFixed(2);}
+		getValue: function(){return world.sumGridValues(world.antColonies[0].foodPheromones);}
 	});
-	this.monitorData.push({
-		label: "Food in nest", 
-		getValue: function(){return world.antColonies[0].food;}
-	});/*
+	
 	this.monitorData.push({
 		label: "Build material", 
 		getValue: function(){return world.antColonies[0].buildMaterial;}
@@ -53,8 +55,10 @@ function StatsMonitor (world, parentElement, leftAdjust) {
 			return '?';
 		}
 	});*/
-	
+	this.lineChart = new LineChart('graphDiv', 200, 100, 100, this.monitorData);
+
 	this.initDomElements(parentElement, leftAdjust);
+
 };
 
 StatsMonitor.prototype.initDomElements = function(parentElement, leftAdjust){
@@ -88,14 +92,20 @@ StatsMonitor.prototype.createValueMonitor = function (label) {
 
 
 StatsMonitor.prototype.start = function(monitorParams) {
+	
 	var thisMonitor = this;
 	this.loop = setInterval(function() {
+
 		thisMonitor.monitorData.forEach(function (d) {
-			document.getElementById(d.label).textContent = d.getValue();
+			thisMonitor.lineChart.pushData(d);
+			document.getElementById(d.label).textContent = d.getValue().toFixed(2);
 		});
-		
+		thisMonitor.lineChart.redraw();
+
 	}, monitorParams.waitTime);
 };
+
+
 
 StatsMonitor.prototype.stop = function() {
 	clearInterval(this.loop)
