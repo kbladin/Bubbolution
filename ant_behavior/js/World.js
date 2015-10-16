@@ -16,12 +16,13 @@ function World (width, height) {
 	this.foodSpawners = [];
 
 	var smallBurstSpawner = {
-		width: 5,
-		height: 5,
+		width: 10,
+		height: 10,
 		spawnTime: 1000,
-		foodAmount: 100,
-		burst: 3,
+		foodAmount: 10,
+		burst: 10,
 	};
+	this.foodSpawners.push(new FoodSpawner(this, 40, 40, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-30, 50, smallBurstSpawner));

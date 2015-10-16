@@ -18,8 +18,13 @@ CircularBuffer.prototype.toString= function() {
 };
 
 CircularBuffer.prototype.get= function(i) {
-    if (i < 0 || i < this.length-this._array.length)
+    //console.log('GET');
+    //console.log('i:', i);
+    //console.log('this.length:', this.length);
+    //console.log('this._array.length:', this._array.length);
+    if (i < 0 || i < this.length-this._array.length){
         return undefined;
+    }
     return this._array[i%this._array.length];
 };
 
