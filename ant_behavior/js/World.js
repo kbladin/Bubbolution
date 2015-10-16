@@ -2,11 +2,11 @@
 // World
 //
 
-function World (width, height) {
+function World (width, height, foodMap) {
 	this.width = width;
 	this.height = height;
 
-	this.initGridData();
+	this.initGridData(foodMap);
 
 	this.numUpdates = 0;
 
@@ -55,21 +55,32 @@ function World (width, height) {
 	//this.enemies.push(enemy)
 };
 
-World.prototype.initGridData = function() {
+World.prototype.initGridData = function(foodMap) {
 	//Convencience vars
 	var cx = this.width/2;
 	var cy = this.height/2;
 	var w = this.width;
 	var h = this.height;
 
+	var canvas = document.createElement('canvas');
+	canvas.width = foodMap.width;
+	canvas.height = foodMap.height;
+	var mapCtx = canvas.getContext('2d');
+
+	mapCtx.drawImage(foodMap, 0, 0, foodMap.width, foodMap.height);
+
+	console.log(foodMap);
 
 	// Create ref to this in current scope for passing to closures
 	var thisWorld = this;
 
+
+
 	this.food = Utils.createGrid(w, h, function (i,j){
-		//if (Utils.insideRect(i, j, cx - 50, cy + 50, 5, 5) ||
-		//	Utils.insideRect(i, j, cx + 50, cy + 50, 5, 5)) {
-		//	return 0;
+		if(foodMap){
+			var data = mapCtx.getImageData(i,j,1,1).data;
+			return data[1] > 0 ? 10 : 0;
+		}
 		if(Utils.insideRect(i, j, cx, cy + 20, 5, 5)){
 			return 10;
 		}/*
