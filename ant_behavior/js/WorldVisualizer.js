@@ -9,7 +9,7 @@ function WorldVisualizer (world, width, height) {
 
 	var groundColor = rgb(219, 184, 77);
 	var underGroundColor = rgb(80,50,0);
-	var foodColor = rgb(0,255,100);
+	var foodColor = rgb(0,100,0);
 	var dirtColor = rgb(150,100,50);
 	var nestColor = rgb(200,150,75);
 	var obstacleColor = rgb(200,150,75);

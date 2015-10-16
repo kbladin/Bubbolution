@@ -22,7 +22,7 @@ function World (width, height, foodMap) {
 		foodAmount: 10,
 		burst: 10,
 	};
-	this.foodSpawners.push(new FoodSpawner(this, 40, 40, smallBurstSpawner));
+	//this.foodSpawners.push(new FoodSpawner(this, 40, 40, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, 6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-6, 6, smallBurstSpawner));
 	//this.foodSpawners.push(new FoodSpawner(this, width-30, 50, smallBurstSpawner));
