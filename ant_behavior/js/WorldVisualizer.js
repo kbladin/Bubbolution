@@ -71,23 +71,6 @@ function WorldVisualizer (world, width, height) {
 			for (var j = 0; j < world.height; j++) {
 				var xPos = dw * i - 0.5 * dw;
 				var yPos = dh * j - 0.5 * dh;
-
-				if (aboveGround) {
-					if (world.obstacles[i][j]) {
-						bmd.ctx.fillStyle = obstacleColor;
-						bmd.ctx.beginPath();
-						bmd.ctx.fillRect(xPos, yPos, dw, dh);
-						bmd.ctx.closePath();
-						bmd.ctx.fill();
-					};
-					if (world.food[i][j] > 0) {
-						bmd.ctx.fillStyle = foodColor;
-						bmd.ctx.beginPath();
-						bmd.ctx.fillRect(xPos, yPos, dw, dh);
-						bmd.ctx.closePath();
-						bmd.ctx.fill();
-					};
-				}
 				for (var k = 0; k < world.antColonies.length; k++) {
 					if (aboveGround) {
 						if(world.antColonies[k].antHill[i][j] > 0){
@@ -116,6 +99,22 @@ function WorldVisualizer (world, width, height) {
 							bmd.ctx.fill();
 						}
 					}
+				if (aboveGround) {
+					if (world.obstacles[i][j]) {
+						bmd.ctx.fillStyle = obstacleColor;
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
+					if (world.food[i][j] > 0) {
+						bmd.ctx.fillStyle = foodColor;
+						bmd.ctx.beginPath();
+						bmd.ctx.fillRect(xPos, yPos, dw, dh);
+						bmd.ctx.closePath();
+						bmd.ctx.fill();
+					};
+				}
 
 					// PHEROMONES
 					if (drawPheromones){
