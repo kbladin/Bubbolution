@@ -53,6 +53,13 @@ function World (width, height, foodMap) {
 	//};
 	//var enemy = new Enemy(this, 2, 2, enemyParams);
 	//this.enemies.push(enemy)
+
+	//Start with a single ant to make things a little more exciting in the beginning
+	var coloy = this.antColonies[0];
+	var antPos = coloy.entrances[0];
+	var ant = new Ant(this, this.antColonies[0], antPos.x, antPos.y, 0);
+	ant.insideNest = true;
+	this.ants.push(ant);
 };
 
 World.prototype.initGridData = function(foodMap) {
